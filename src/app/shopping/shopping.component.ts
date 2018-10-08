@@ -25,9 +25,13 @@ export class ShoppingComponent implements OnInit {
     }
     
     this.getShoppingItems();
+
+    this.newShoppingItem=new ShoppingItem(1,4,"płyn do naczyń", "chemia",0);
+    this.addShoppingItem(this.newShoppingItem);
   }
 
   getUsers() {
+    SharedService.users=[];
     this._dbService.getUsers()
     .subscribe((res: any[]) => {
       res.forEach(elem => {
@@ -38,6 +42,7 @@ export class ShoppingComponent implements OnInit {
   }
 
   getShoppingItems() {
+    this.shoppingItems=[];
     this._dbService.getShoppingItems()
     .subscribe((res: any[]) => {
       res.forEach(elem => {

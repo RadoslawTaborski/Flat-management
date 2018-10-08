@@ -25,6 +25,7 @@ export class BalancesComponent implements OnInit {
   }
 
   getUsers() {
+    SharedService.users=[];
     this._dbService.getUsers()
     .subscribe((res: any[]) => {
       res.forEach(elem => {
@@ -35,6 +36,7 @@ export class BalancesComponent implements OnInit {
   }
   
   getBalances() {
+    this.balances=[];
     this._dbService.getPayments()
     .subscribe((res: any[]) => {
       res.forEach(elem => {

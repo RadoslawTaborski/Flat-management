@@ -23,9 +23,13 @@ export class PaymentComponent implements OnInit {
       this.getUsers();
     }
     this.getPayments();
-  
+    this.newPayment= new Payment(1,1,2,"mąka",2.5,0);
+
+    this.addPayment(this.newPayment);
   }
+
   getUsers() {
+    SharedService.users=[];
     this._dbService.getUsers()
     .subscribe((res: any[]) => {
       res.forEach(elem => {
@@ -36,6 +40,7 @@ export class PaymentComponent implements OnInit {
   }
 
   getPayments() {
+    this.payments=[];
     this._dbService.getPayments()
     .subscribe((res: any[]) => {
       res.forEach(elem => {
