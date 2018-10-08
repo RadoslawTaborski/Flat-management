@@ -1,4 +1,9 @@
 export class User {
-    Id: string;
+    Id: number;
     Login: String;
+
+    constructor(Id: number, Login: string){
+        this.Id = Id;
+        this.Login=Login;
+    }
 }

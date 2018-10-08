@@ -12,42 +12,38 @@ import { SharedService } from '../shared.service'
 })
 export class ShoppingComponent implements OnInit {
   shoppingItems : ShoppingItem[] =[];
-  newShoppingItem : ShoppingItem = new ShoppingItem();
+  newShoppingItem : ShoppingItem = null;
 
   submitError: boolean = false;
 
   constructor(private _dbService: DbService) { }
 
   ngOnInit() {
-    if(SharedService.users.length=0){
+    console.log(SharedService.length)
+    if(SharedService.users.length==0){
       this.getUsers();
     }
     
     this.getShoppingItems();
-
-    this.newShoppingItem.Id=3;
-    this.newShoppingItem.Category="szamka";
-    this.newShoppingItem.Name="kasza";
-    this.newShoppingItem.UserId=1;
-
-    this.addShoppingItem(this.newShoppingItem);
-
-    this.removeShoppingItem(this.newShoppingItem);
   }
 
   getUsers() {
     this._dbService.getUsers()
-    .subscribe((res: User[]) => {
-      console.log(res);
-      SharedService.users = res;
+    .subscribe((res: any[]) => {
+      res.forEach(elem => {
+        SharedService.users.push(new User(Number(elem.ID),elem.Login))
+      });
+      console.log(SharedService.users)
     })
   }
 
   getShoppingItems() {
     this._dbService.getShoppingItems()
-    .subscribe((res: ShoppingItem[]) => {
-      console.log(res);
-      this.shoppingItems = res;
+    .subscribe((res: any[]) => {
+      res.forEach(elem => {
+        this.shoppingItems.push(new ShoppingItem(Number(elem.ID),Number(elem.Added),elem.Name,elem.Category,elem.IsBought))
+      });
+      console.log(this.shoppingItems)
     })
   }
 

@@ -13,39 +13,35 @@ import { User } from '../models/user';
 export class PaymentComponent implements OnInit {
 
   payments : Payment[] = [];
-  newPayment : Payment = new Payment();
+  newPayment : Payment = null;
   submitError: boolean = false;
 
   constructor(private _dbService: DbService) { }
 
   ngOnInit() {
-    if(SharedService.users.length=0){
+    if(SharedService.users.length==0){
       this.getUsers();
     }
-
     this.getPayments();
-
-    this.newPayment.User1Id=1;
-    this.newPayment.User2Id=2;
-    this.newPayment.Name="whiskey";
-    this.newPayment.IsReturn=0;
-    this.newPayment.Value=4.5;
-
-    this.addPayment(this.newPayment);
+  
   }
   getUsers() {
     this._dbService.getUsers()
-    .subscribe((res: User[]) => {
-      console.log(res);
-      SharedService.users = res;
+    .subscribe((res: any[]) => {
+      res.forEach(elem => {
+        SharedService.users.push(new User(Number(elem.ID),elem.Login))
+      });
+      console.log(SharedService.users)
     })
   }
 
   getPayments() {
     this._dbService.getPayments()
-    .subscribe((res: Payment[]) => {
-      console.log(res);
-      this.payments = res;
+    .subscribe((res: any[]) => {
+      res.forEach(elem => {
+        this.payments.push(new Payment(Number(elem.ID),Number(elem.User1ID),Number(elem.User2ID),elem.Name,Number(elem.Amount),elem.IsReturn))
+      });
+      console.log(this.payments)
     })
   }
 

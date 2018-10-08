@@ -17,26 +17,30 @@ export class BalancesComponent implements OnInit {
   constructor(private _dbService: DbService) { }
 
   ngOnInit() {
-    if(SharedService.users.length=0){
+    if(SharedService.users.length==0){
       this.getUsers();
     }
-    
+
     this.getBalances();
   }
 
   getUsers() {
     this._dbService.getUsers()
-    .subscribe((res: User[]) => {
-      console.log(res);
-      SharedService.users = res;
+    .subscribe((res: any[]) => {
+      res.forEach(elem => {
+        SharedService.users.push(new User(Number(elem.ID),elem.Login))
+      });
+      console.log(SharedService.users)
     })
   }
   
   getBalances() {
     this._dbService.getPayments()
-    .subscribe((res: Balance[]) => {
-      console.log(res);
-      this.balances = res;
+    .subscribe((res: any[]) => {
+      res.forEach(elem => {
+        this.balances.push(new Balance(Number(elem.ID),Number(elem.User1ID),Number(elem.User2ID),Number(elem.Amount)))
+      });
+      console.log(this.balances)
     })
   }
 
