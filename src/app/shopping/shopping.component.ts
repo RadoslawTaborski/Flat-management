@@ -41,6 +41,11 @@ export class ShoppingComponent implements OnInit {
     })
   }
 
+  getUserById(id: number): String{
+    var a =SharedService.users.filter(x => x.Id == id)[0];
+    return a.Login;
+  }
+
   getShoppingItems() {
     this.shoppingItems=[];
     this._dbService.getShoppingItems()

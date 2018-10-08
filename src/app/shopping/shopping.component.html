@@ -1,3 +1,24 @@
-<p>
-  shopping works!
-</p>
+
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Nazwa</th>
+      <th>Kategoria</th>
+      <th>Kto dodał</th>
+      <th>Usuń</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of shoppingItems; let i = index">
+      <td>{{item.Name}}</td>
+      <td>{{item.Category}}</td>
+      <td>{{getUserById(item.UserId)}}</td>
+      <td>
+        <button (click)="removeShoppingItem(item)" class="btn btn-outline-danger">
+          <i class="fa fa-times" aria-hidden="true"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
