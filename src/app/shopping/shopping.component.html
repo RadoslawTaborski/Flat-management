@@ -1,19 +1,57 @@
+<table *ngIf="loadedShopping==1 && loadedUsers==1" class="table table-hover">
+    <tbody>
+        <tr>
+            <td>
+                <select [(ngModel)]="categoryFilter"  class="custom-select">
+                    <option *ngFor="let category of categoriesFilter" [value]="categoriesFilter.indexOf(category)">{{category}}</option>
+                </select>
+            </td>
+            <td>  
+                <select [(ngModel)]="userFilter"  class="custom-select">
+                    <option *ngFor="let user of usersFilter" [value]="usersFilter.indexOf(user)">{{user}}</option>
+                </select>
+            </td>
+            <td>
+                <button (click)="filtering(userFilter,categoryFilter)" class="btn btn-outline-primary">
+                  <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+              </td>
+        </tr>
+    </tbody>
+  </table>
 
-
-<table class="table table-hover">
+<table *ngIf="loadedShopping==1 && loadedUsers==1" class="table table-hover">
   <thead>
-    <tr>
-      <th>Nazwa</th>
-      <th>Kategoria</th>
-      <th>Kto dodał</th>
-      <th>Usuń</th>
-    </tr>
+        <tr>
+          <th>Nazwa</th>
+          <th>Kategoria</th>
+          <th>Dodał</th>
+          <th>Akcja</th>
+        </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let item of shoppingItems; let i = index">
+      <tr>
+          <td><input class="form-control" id="name" placeholder="nazwa" [(ngModel)]="name"></td>
+          <td>  
+              <select id="categories" [(ngModel)]="categoryId"  class="custom-select">
+                  <option *ngFor="let category of categories" [value]="categories.indexOf(category)">{{category}}</option>
+              </select>
+          </td>
+          <td>
+              <select [(ngModel)]="userId"  class="custom-select">
+                  <option *ngFor="let user of getUsersItems()" [value]="user.Id" >{{user.Login}}</option>
+              </select>
+          </td>
+          <td>
+            <button (click)="addShoppingItem(createShoppingItem(userId,name,categoryId))" class="btn btn-outline-success">
+              <i class="fa fa-check" aria-hidden="true"></i>
+            </button>
+          </td>
+      </tr>
+    <tr *ngFor="let item of filteredShoppingItems; let i = index">
       <td>{{item.Name}}</td>
       <td>{{item.Category}}</td>
-      <td>{{getUserById(item.UserId)}}</td>
+      <td>{{getUserById(item.UserId).Login}}</td>
       <td>
         <button (click)="removeShoppingItem(item)" class="btn btn-outline-danger">
           <i class="fa fa-times" aria-hidden="true"></i>
