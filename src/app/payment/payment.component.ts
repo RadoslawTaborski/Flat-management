@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Payment, PaymentMapper } from '../models/payment';
+import { Payment, PaymentMapper, PaymentGroup } from '../models/payment';
 import { DbService } from '../db.service';
 import { SharedService } from '../shared.service'
-import { User, DalUser, UserMapper } from '../models/user';
+import { User, UserMapper } from '../models/user';
 import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
@@ -14,6 +14,9 @@ import { forEach } from '@angular/router/src/utils/collection';
 export class PaymentComponent implements OnInit {
   payments: Payment[] = [];
   filteredPayments: Payment[] = [];
+  paymentsGroup: PaymentGroup[] = [];
+  selected: [User, boolean][] = [];
+
   userID: number = 1;
   name: string;
   value: string;
@@ -52,13 +55,31 @@ export class PaymentComponent implements OnInit {
   }
 
   selectUser(user: User) {
-    const index: number = this.selectedUser.indexOf(user);
+    const index: number = this.findSelected(user);
     if (index !== -1) {
-      this.selectedUser.splice(index, 1);
-    } else {
-      this.selectedUser.push(user);
+      this.selected[index]["1"] = !this.selected[index]["1"];
     }
-    console.log(this.selectedUser)
+    console.log(this.selected)
+  }
+
+  findSelected(user: User): number {
+    let tmp = this.selected.filter(x => x["0"] == user)[0];
+    console.log(tmp);
+    return this.selected.indexOf(tmp);
+  }
+
+  groupPayments(payments: Payment[]) {
+    this.paymentsGroup = [];
+    this._dbService.getLastActionNumber().subscribe(res => {
+      let action = Number(res[0]["MAX(Action)"]);
+      for (let i = 1; i <= action; ++i) {
+        let tmpPayments = payments.filter(x => x.Action == i);
+        if (tmpPayments.length > 0) {
+          this.paymentsGroup.push(new PaymentGroup(tmpPayments));
+        }
+      }
+      console.log(this.paymentsGroup);
+    });
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,6 +97,10 @@ export class PaymentComponent implements OnInit {
         SharedService.users.forEach(item => {
           SharedService.usersFilters.push(item.Login)
         });
+        this.selected = [];
+        SharedService.users.forEach(item => {
+          this.selected.push([item, true]);
+        })
         this.loadedUsers = true;
         this.getPayments();
       })
@@ -92,9 +117,8 @@ export class PaymentComponent implements OnInit {
         });
         console.log(this.payments)
         this.filteredPayments = this.payments;
-        this.selectedUser = [];
-        this.selectedUser = this.selectedUser.concat(SharedService.users);
 
+        this.groupPayments(this.filteredPayments);
         this.loadedPayments = true;
       })
   }
@@ -104,18 +128,37 @@ export class PaymentComponent implements OnInit {
       .subscribe(res => { this.getPayments(); }, err => { this.submitError = true; })
   };
 
+  countSelectedUsers(): number {
+    let result = 0;
+    this.selected.forEach(item => {
+      if (item["1"]) {
+        result++;
+      }
+    });
+    return result;
+  }
+
+  getSelectedUsers(): User[] {
+    let result: User[] = [];
+    this.selected.forEach(item => {
+      if (item["1"]) {
+        result.push(item["0"])
+      }
+    });
+    return result;
+  }
+
   addPayments(name: string, userID: number, value: number) {
-    if (this.selectedUser.length > 0 && value > 0 && name != "") {
-      let nr: number = this.selectedUser.length;
+    let count = this.countSelectedUsers();
+    if (count > 0 && value > 0 && name != "") {
+      let nr: number = count;
       let val = Number((value / nr).toFixed(2));
       this._dbService.getLastActionNumber().subscribe(res => {
         //console.log(res[0]["MAX(Action)"]);
         let action = Number(res[0]["MAX(Action)"]) + 1;
-        for (let u of this.selectedUser) {
-          if (u.ID != this.getUserByID(this.userID).ID) {
-            let payment = new Payment(0, this.getUserByID(userID), u, name, val, 0, action, "");
-            this.addPayment(payment);
-          }
+        for (let u of this.getSelectedUsers()) {
+          let payment = new Payment(0, this.getUserByID(userID), u, name, val, 0, action, "");
+          this.addPayment(payment);
         }
       });
     }

@@ -68,8 +68,9 @@ export class CleaningComponent implements OnInit {
           this.cleaners.push(CleanerMapper.ConvertToEntity(tmp, SharedService.users));
         });
         console.log(this.cleaners)
-        this.loadedCleaning = true;
         this.getCleaning();
+        this.cleaners = this.cleaners.sort((a, b) => (a.Counter > b.Counter) ? 1 : ((b.Counter > a.Counter) ? -1 : (a.LastTimeOfCleaning > b.LastTimeOfCleaning) ? 1 : -1));
+        this.loadedCleaning = true;
       })
   }
 

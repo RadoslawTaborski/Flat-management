@@ -26,6 +26,8 @@
             <th>Osoba1</th>
             <th>Osoba2</th>
             <th>Kwota</th>
+            <th>Oddaje</th>
+            <th>Zwrot</th>
         </tr>
     </thead>
     <tbody>
@@ -33,6 +35,12 @@
             <td>{{item.User1.Login}}</td>
             <td>{{item.User2.Login}}</td>
             <td>{{item.Value}}</td>
+            <td><input *ngIf="item.Value<0" class="form-control" placeholder="kwota" [(ngModel)]="value[i]"></td>
+            <td>
+                <button *ngIf="item.Value<0" (click)="addPayment(item.User1,item.User2,value[i])" class="btn btn-outline-success">
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                </button>
+            </td>
         </tr>
     </tbody>
 </table>

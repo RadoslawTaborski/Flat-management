@@ -1,6 +1,47 @@
 import { User } from "./user";
 import { InstanceFinder } from "./instance.finder";
 
+export class PaymentGroup {
+	IDs: number[];
+	User1: User;
+	Users: User[];
+	Name: string;
+	Value: number;
+	Action: number;
+	AddDate: string;
+	Payments: Payment[];
+
+	constructor(payments: Payment[]) {
+		this.Payments = payments;
+		if (payments.length > 0) {
+			this.Users = [];
+			this.IDs = [];
+			this.Value = 0;
+			this.User1 = payments[0].User1;
+			this.Name = payments[0].Name;
+			this.Action = payments[0].Action;
+			this.AddDate = payments[0].AddDate;
+			payments.forEach(item => {
+				this.IDs.push(item.ID);
+				this.Users.push(item.User2);
+				this.Value += item.Value;
+			});
+		}
+	}
+
+	getInitials(): string {
+		let results: string[] = [];
+		let result = "";
+		this.Users.forEach(item => {
+			results.push(item.Login[0]);
+		});
+		results.forEach(item => {
+			result += item + ", ";
+		});
+		return result.substring(0, result.length - 2);
+	}
+}
+
 export class Payment {
 	ID: number;
 	User1: User;

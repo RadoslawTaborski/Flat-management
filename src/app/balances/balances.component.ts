@@ -3,6 +3,7 @@ import { Balance, DalBalance, BalanceMapper } from '../models/balance';
 import { DbService } from '../db.service';
 import { SharedService } from '../shared.service'
 import { User, DalUser, UserMapper } from '../models/user';
+import { Payment, PaymentMapper } from '../models/payment';
 
 @Component({
   selector: 'app-balances',
@@ -16,6 +17,7 @@ export class BalancesComponent implements OnInit {
   usersFilter: string[] = [];
   user1Filter: number = 0;
   user2Filter: number = 0;
+  value: number[] = []
 
   submitError: boolean = false;
   loadedBalances: boolean = false;
@@ -90,9 +92,25 @@ export class BalancesComponent implements OnInit {
           let tmp = BalanceMapper.ConvertToDalFromJson(elem);
           this.balances.push(BalanceMapper.ConvertToEntity(tmp, SharedService.users))
         });
+        for (let i = 0; i < this.balances.length; ++i) {
+          this.value.push(0);
+        }
         console.log(this.balances)
         this.filteredBalances = this.balances;
         this.loadedBalances = true;
       })
   }
+
+  addPayment(user1: User, user2: User, value: number) {
+    if (value > 0) {
+      this._dbService.getLastActionNumber().subscribe(res => {
+        //console.log(res[0]["MAX(Action)"]);
+        let action = Number(res[0]["MAX(Action)"]) + 1;
+        let tmp = new Payment(0, user1, user2, "ZWROT", value, 1, action, "");
+        this._dbService.addPayment(PaymentMapper.ConvertToDal(tmp))
+          .subscribe(res => { this.getBalances(); }, err => { this.submitError = true; })
+      });
+    }
+  };
+
 }
