@@ -2,37 +2,37 @@
     <tbody>
         <tr>
             <td>
-                <select [(ngModel)]="user1Filter"  class="custom-select">
+                <select [(ngModel)]="user1Filter" class="custom-select">
                     <option *ngFor="let user of getUsersFilterItems()" [value]="getUsersFilterItems().indexOf(user)">{{user}}</option>
                 </select>
             </td>
-            <td>  
-                <select [(ngModel)]="user2Filter"  class="custom-select">
+            <td>
+                <select [(ngModel)]="user2Filter" class="custom-select">
                     <option *ngFor="let user of getUsersFilterItems()" [value]="getUsersFilterItems().indexOf(user)">{{user}}</option>
                 </select>
             </td>
             <td>
                 <button (click)="filtering(user1Filter,user2Filter)" class="btn btn-outline-primary">
-                  <i class="fa fa-search" aria-hidden="true"></i>
+                    <i class="fa fa-search" aria-hidden="true"></i>
                 </button>
-              </td>
+            </td>
         </tr>
     </tbody>
-  </table>
+</table>
 
 <table *ngIf="loadedBalances==1" class="table table-hover">
     <thead>
-          <tr>
+        <tr>
             <th>Osoba1</th>
             <th>Osoba2</th>
             <th>Kwota</th>
-          </tr>
+        </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of filteredBalances; let i = index">
-        <td>{{item.User1.Login}}</td>
-        <td>{{item.User2.Login}}</td>
-        <td>{{item.Value}}</td>
-      </tr>
+        <tr *ngFor="let item of filteredBalances; let i = index">
+            <td>{{item.User1.Login}}</td>
+            <td>{{item.User2.Login}}</td>
+            <td>{{item.Value}}</td>
+        </tr>
     </tbody>
 </table>

@@ -2,61 +2,61 @@
     <tbody>
         <tr>
             <td>
-                <select [(ngModel)]="categoryFilter"  class="custom-select">
+                <select [(ngModel)]="categoryFilter" class="custom-select">
                     <option *ngFor="let category of categoriesFilter" [value]="categoriesFilter.indexOf(category)">{{category}}</option>
                 </select>
             </td>
-            <td>  
-                <select [(ngModel)]="userFilter"  class="custom-select">
+            <td>
+                <select [(ngModel)]="userFilter" class="custom-select">
                     <option *ngFor="let user of getUsersFilterItems()" [value]="getUsersFilterItems().indexOf(user)">{{user}}</option>
                 </select>
             </td>
             <td>
                 <button (click)="filtering(userFilter,categoryFilter)" class="btn btn-outline-primary">
-                  <i class="fa fa-search" aria-hidden="true"></i>
+                    <i class="fa fa-search" aria-hidden="true"></i>
                 </button>
-              </td>
+            </td>
         </tr>
     </tbody>
-  </table>
+</table>
 
 <table *ngIf="loadedShopping==1" class="table table-hover">
-  <thead>
+    <thead>
         <tr>
-          <th>Nazwa</th>
-          <th>Kategoria</th>
-          <th>Dodał</th>
-          <th>Akcja</th>
+            <th>Nazwa</th>
+            <th>Kategoria</th>
+            <th>Dodał</th>
+            <th>Akcja</th>
         </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><input class="form-control" id="name" placeholder="nazwa" [(ngModel)]="name"></td>
-          <td>  
-              <select id="categories" [(ngModel)]="categoryID"  class="custom-select">
-                  <option *ngFor="let category of categories" [value]="categories.indexOf(category)">{{category}}</option>
-              </select>
-          </td>
-          <td>
-              <select [(ngModel)]="userID"  class="custom-select">
-                  <option *ngFor="let user of getUsersItems()" [value]="user.ID" >{{user.Login}}</option>
-              </select>
-          </td>
-          <td>
-            <button (click)="addShoppingItem(createShoppingItem(userID,name,categoryID))" class="btn btn-outline-success">
-              <i class="fa fa-check" aria-hidden="true"></i>
-            </button>
-          </td>
-      </tr>
-    <tr *ngFor="let item of filteredShoppingItems; let i = index">
-      <td>{{item.Name}}</td>
-      <td>{{item.Category}}</td>
-      <td>{{item.User.Login}}</td>
-      <td>
-        <button (click)="removeShoppingItem(item)" class="btn btn-outline-danger">
-          <i class="fa fa-times" aria-hidden="true"></i>
-        </button>
-      </td>
-    </tr>
-  </tbody>
+    </thead>
+    <tbody>
+        <tr>
+            <td><input class="form-control" id="name" placeholder="nazwa" [(ngModel)]="name"></td>
+            <td>
+                <select id="categories" [(ngModel)]="categoryID" class="custom-select">
+                    <option *ngFor="let category of categories" [value]="categories.indexOf(category)">{{category}}</option>
+                </select>
+            </td>
+            <td>
+                <select [(ngModel)]="userID" class="custom-select">
+                    <option *ngFor="let user of getUsersItems()" [value]="user.ID">{{user.Login}}</option>
+                </select>
+            </td>
+            <td>
+                <button (click)="addShoppingItem(createShoppingItem(userID,name,categoryID))" class="btn btn-outline-success">
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                </button>
+            </td>
+        </tr>
+        <tr *ngFor="let item of filteredShoppingItems; let i = index">
+            <td>{{item.Name}}</td>
+            <td>{{item.Category}}</td>
+            <td>{{item.User.Login}}</td>
+            <td>
+                <button (click)="removeShoppingItem(item)" class="btn btn-outline-danger">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </td>
+        </tr>
+    </tbody>
 </table>
