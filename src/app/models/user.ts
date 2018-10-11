@@ -1,9 +1,9 @@
 export class User {
-    Id: number;
+    ID: number;
     Login: string;
 
-    constructor(Id: number, Login: string){
-        this.Id = Id;
+    constructor(ID: number, Login: string){
+        this.ID = ID;
         this.Login=Login;
     }
 }
@@ -24,7 +24,7 @@ export class UserMapper{
 	}
 	
 	static ConvertToDal(entity: User): DalUser{
-		return new DalUser(entity.Id, entity.Login);
+		return new DalUser(entity.ID, entity.Login);
 	}
 	
 	static ConvertToDalFromJson(data: any): DalUser{

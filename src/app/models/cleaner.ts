@@ -2,13 +2,13 @@ import { User } from "./user";
 import { InstanceFinder } from "./instance.finder";
 
 export class Cleaner{
-	Id: number;
+	ID: number;
 	User: User;
 	Counter: number;
 	LastTimeOfCleaning: string;
 	
-	constructor(Id: number, user: User, counter: number, date: string){
-		this.Id=Id;
+	constructor(ID: number, user: User, counter: number, date: string){
+		this.ID=ID;
 		this.User=user;
 		this.Counter=counter;
 		this.LastTimeOfCleaning=date;
@@ -31,11 +31,11 @@ export class DalCleaner{
 
 export class CleanerMapper{
 	static ConvertToEntity(dal: DalCleaner, users: User[]): Cleaner{
-		return new Cleaner(dal.ID, InstanceFinder.getUserById(users, dal.UserID), dal.Counter, dal.LastTime);
+		return new Cleaner(dal.ID, InstanceFinder.getUserByID(users, dal.UserID), dal.Counter, dal.LastTime);
 	}
 	
 	static ConvertToDal(entity: Cleaner): DalCleaner{
-		return new DalCleaner(entity.Id, entity.User.Id, entity.Counter, entity.LastTimeOfCleaning);
+		return new DalCleaner(entity.ID, entity.User.ID, entity.Counter, entity.LastTimeOfCleaning);
 	}
 	
 	static ConvertToDalFromJson(data: any): DalCleaner{

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DbService} from '../db.service';
-import { ShoppingItem } from '../models/shoppingItem';
-import { User } from '../models/user';
+import { ShoppingItem, ShoppingItemMapper } from '../models/shoppingItem';
+import { User, UserMapper } from '../models/user';
 import { SharedService } from '../shared.service'
 
 @Component({
@@ -13,8 +13,8 @@ import { SharedService } from '../shared.service'
 export class ShoppingComponent implements OnInit {
   categories: string[] = ["chemia", "spożywcze", "inne"];
   categoriesFilter: string[] = ["wszystkie","chemia", "spożywcze", "inne"];
-  userId: number=1;
-  categoryId: number=0;
+  userID: number=1;
+  categoryID: number=0;
   name: string;
   userFilter: number = 0;
   categoryFilter: number = 0;
@@ -38,15 +38,59 @@ export class ShoppingComponent implements OnInit {
     }
   }
 
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  getUserByID(id: number): User{
+    //console.log(id)
+    var a =SharedService.users.filter(x => x.ID == id)[0];
+    //console.log(SharedService.users)
+    return a;
+  }
+
+  getUsersItems(): User[]{
+    return SharedService.users;
+  }
+
+  getUsersFilterItems(): string[]{
+    //console.log(SharedService.usersFilters)
+    return SharedService.usersFilters;
+  }
+
+  createShoppingItem(user: number, name: string, category: number): ShoppingItem{
+    //console.log(user,name,category)
+    return new ShoppingItem(0,this.getUserByID(user), name ,this.categories[category],0,"","");
+  }
+
+  removeShoppingItem(item: ShoppingItem) {
+    //console.log(item)
+    this._dbService.removeShoppingItem(item.ID)
+      .subscribe(res => { this.getShoppingItems(); }, err => { this.submitError = true; })
+  }
+
+  filtering(user: number, category: number) {
+    if(user == 0 && category == 0){
+      this.filteredShoppingItems=this.shoppingItems;
+    }else if(user != 0 && category != 0) {
+      this.filteredShoppingItems=this.shoppingItems.filter(x => x.Category == this.categoriesFilter[category] && SharedService.usersFilters[user] == x.User.Login)
+    }else if(user != 0){
+      this.filteredShoppingItems=this.shoppingItems.filter(x => SharedService.usersFilters[user] == x.User.Login)
+    }else if(category != 0){
+      this.filteredShoppingItems=this.shoppingItems.filter(x => x.Category == this.categoriesFilter[category])
+    }
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+
   getData() {
     SharedService.users=[];
     this._dbService.getUsers()
     .subscribe((res: any[]) => {
       res.forEach(elem => {
-        SharedService.users.push(new User(Number(elem.ID),elem.Login))
+        let tmp = UserMapper.ConvertToDalFromJson(elem);
+        SharedService.users.push(UserMapper.ConvertToEntity(tmp))
       });
-      SharedService.usersFilters=[];
       console.log(SharedService.users)
+      SharedService.usersFilters=[];
       SharedService.usersFilters.push("wszyscy");
       SharedService.users.forEach(item => {
         SharedService.usersFilters.push(item.Login)
@@ -56,26 +100,14 @@ export class ShoppingComponent implements OnInit {
     })
   }
 
-  getUserById(id: number): User{
-    var a =SharedService.users.filter(x => x.Id == id)[0];
-    return a;
-  }
-
-  getUsersItems(): User[]{
-    return SharedService.users;
-  }
-
-  getUsersFilterItems(): string[]{
-    return SharedService.usersFilters;
-  }
-
   getShoppingItems() {
     this.shoppingItems=[];
     this.filteredShoppingItems=[];
     this._dbService.getShoppingItems()
     .subscribe((res: any[]) => {
       res.forEach(elem => {
-        this.shoppingItems.push(new ShoppingItem(Number(elem.ID),this.getUserById(Number(elem.Added)),elem.Name,elem.Category,elem.IsBought, elem.AddDate, elem.BoughtDate))
+        let tmp= ShoppingItemMapper.ConvertToDalFromJson(elem);
+        this.shoppingItems.push(ShoppingItemMapper.ConvertToEntity(tmp, SharedService.users));
       });
       console.log(this.shoppingItems)
       this.filteredShoppingItems=this.shoppingItems;
@@ -83,33 +115,10 @@ export class ShoppingComponent implements OnInit {
     })
   }
 
-  createShoppingItem(user: number, name: string, category: number): ShoppingItem{
-    console.log(user,name,category)
-    return new ShoppingItem(0,this.getUserById(user), name ,this.categories[category],0,"","");
-  }
-
   addShoppingItem(item: ShoppingItem) {
     if(item.Name!="" && item.User!=null && item.Category!=""){
-    this._dbService.addShoppingItem(item)
+    this._dbService.addShoppingItem(ShoppingItemMapper.ConvertToDal(item))
       .subscribe(res => { this.getShoppingItems(); }, err => { this.submitError = true; })
-    }
-  }
-
-  removeShoppingItem(item: ShoppingItem) {
-    this._dbService.removeShoppingItem(item.Id)
-      .subscribe(res => { this.getShoppingItems(); }, err => { this.submitError = true; })
-  }
-
-  filtering(user: number, category: number) {
-    console.log(user,name,category)
-    if(user == 0 && category == 0){
-      this.filteredShoppingItems=this.shoppingItems;
-    }else if(user != 0 && category != 0) {
-      this.filteredShoppingItems=this.shoppingItems.filter(x => x.Category == this.categoriesFilter[category] && SharedService.usersFilters[user] == x.User.Login)
-    }else if(user != 0){
-      this.filteredShoppingItems=this.shoppingItems.filter(x => SharedService.usersFilters[user] == x.User.Login)
-    }else if(category != 0){
-      this.filteredShoppingItems=this.shoppingItems.filter(x => x.Category == this.categoriesFilter[category])
     }
   }
 }

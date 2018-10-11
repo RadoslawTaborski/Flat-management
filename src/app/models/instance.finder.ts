@@ -2,8 +2,9 @@ import { User } from "./user";
 import { Cleaner } from "./cleaner";
 
 export class InstanceFinder{
-	static getUserById(users: User[], id:number): User{
-		let user = users.filter(x=>x.Id==id);
+	static getUserByID(users: User[], id:number): User{
+		//console.log(users, id)
+		let user = users.filter(x=>x.ID==id);
 		if(user.length>0){
 			return user[0];
 		}else{
@@ -11,8 +12,9 @@ export class InstanceFinder{
 		}
 	}
 	
-	static getCleanerById(cleaners: Cleaner[], id:number): Cleaner{
-		let cleaner = cleaners.filter(x=>x.Id==id);
+	static getCleanerByID(cleaners: Cleaner[], id:number): Cleaner{
+		//console.log(cleaners, id)
+		let cleaner = cleaners.filter(x=>x.ID==id);
 		if(cleaner.length>0){
 			return cleaner[0];
 		}else{

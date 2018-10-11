@@ -2,13 +2,13 @@ import { User } from "./user";
 import { InstanceFinder } from "./instance.finder";
 
 export class Balance {
-    Id: number;
+    ID: number;
     User1: User;
     User2: User;
     Value: number;
 
-    constructor(Id: number, User1:User, User2:User, Value: number){
-        this.Id = Id;
+    constructor(ID: number, User1:User, User2:User, Value: number){
+        this.ID = ID;
         this.User1=User1;
         this.User2=User2;
         this.Value=Value;
@@ -31,11 +31,11 @@ export class DalBalance{
 
 export class BalanceMapper{
 	static ConvertToEntity(dal: DalBalance, users: User[]): Balance{
-		return new Balance(dal.ID, InstanceFinder.getUserById(users, dal.User1ID), InstanceFinder.getUserById(users, dal.User2ID), dal.Value);
+		return new Balance(dal.ID, InstanceFinder.getUserByID(users, dal.User1ID), InstanceFinder.getUserByID(users, dal.User2ID), dal.Value);
 	}
 	
 	static ConvertToDal(entity: Balance): DalBalance{
-		return new DalBalance(entity.Id, entity.User1.Id, entity.User2.Id, entity.Value);
+		return new DalBalance(entity.ID, entity.User1.ID, entity.User2.ID, entity.Value);
 	}
 	
 	static ConvertToDalFromJson(data: any): DalBalance{

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Balance } from '../models/balance';
+import { Balance, DalBalance, BalanceMapper } from '../models/balance';
 import { DbService } from '../db.service';
 import { SharedService } from '../shared.service'
-import { User } from '../models/user';
+import { User, DalUser, UserMapper } from '../models/user';
 
 @Component({
   selector: 'app-balances',
@@ -32,26 +32,10 @@ export class BalancesComponent implements OnInit {
     }
   }
 
-  getData() {
-    SharedService.users=[];
-    this._dbService.getUsers()
-    .subscribe((res: any[]) => {
-      res.forEach(elem => {
-        SharedService.users.push(new User(Number(elem.ID),elem.Login))
-      });
-      console.log(SharedService.users)
-      SharedService.usersFilters=[];
-      SharedService.usersFilters.push("wszyscy");
-      SharedService.users.forEach(item => {
-        SharedService.usersFilters.push(item.Login)
-      });
-      this.loadedUsers=true;
-      this.getBalances();
-    })
-  }
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  getUserById(id: number): User{
-    var a =SharedService.users.filter(x => x.Id == id)[0];
+  getUserByID(id: number): User{
+    var a =SharedService.users.filter(x => x.ID == id)[0];
     return a;
   }
 
@@ -61,21 +45,6 @@ export class BalancesComponent implements OnInit {
 
   getUsersFilterItems(): string[]{
     return SharedService.usersFilters;
-  }
-  
-  getBalances() {
-
-    this.filteredBalances=[];
-    this._dbService.getBalances()
-    .subscribe((res: any[]) => {
-      this.balances=[];
-      res.forEach(elem => {
-        this.balances.push(new Balance(Number(elem.ID),this.getUserById(Number(elem.User1ID)),this.getUserById(Number(elem.User2ID)),Number(elem.Value)))
-      });
-      console.log(this.balances)
-      this.filteredBalances=this.balances;
-      this.loadedBalances=true;
-    })
   }
 
   filtering(user1: number, user2: number) {
@@ -89,5 +58,41 @@ export class BalancesComponent implements OnInit {
     }else if(user2 != 0){
       this.filteredBalances=this.balances.filter(x => SharedService.usersFilters[user2] == x.User2.Login)
     }
+  }
+  
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  getData() {
+    SharedService.users=[];
+    this._dbService.getUsers()
+    .subscribe((res: any[]) => {
+      res.forEach(elem => {
+        let tmp = UserMapper.ConvertToDalFromJson(elem);
+        SharedService.users.push(UserMapper.ConvertToEntity(tmp))
+      });
+      console.log(SharedService.users)
+      SharedService.usersFilters=[];
+      SharedService.usersFilters.push("wszyscy");
+      SharedService.users.forEach(item => {
+        SharedService.usersFilters.push(item.Login)
+      });
+      this.loadedUsers=true;
+      this.getBalances();
+    })
+  }
+
+  getBalances() {
+    this.filteredBalances=[];
+    this._dbService.getBalances()
+    .subscribe((res: any[]) => {
+      this.balances=[];
+      res.forEach(elem => {
+        let tmp = BalanceMapper.ConvertToDalFromJson(elem);
+        this.balances.push(BalanceMapper.ConvertToEntity(tmp, SharedService.users))
+      });
+      console.log(this.balances)
+      this.filteredBalances=this.balances;
+      this.loadedBalances=true;
+    })
   }
 }

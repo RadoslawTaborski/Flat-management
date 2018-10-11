@@ -1,3 +1,37 @@
-<p>
-  cleaning works!
-</p>
+<table *ngIf="loadedCleaning==1" class="table table-hover">
+  <thead>
+        <tr>
+          <th>Kto</th>
+          <th>Ile razy</th>
+          <th>Ostatnio</th>
+          <th>Akcja</th>
+        </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of cleaners; let i = index">
+      <td>{{item.User.Login}}</td>
+      <td>{{item.Counter}}</td>
+      <td>{{item.LastTimeOfCleaning}}</td>
+      <td>
+        <button (click)="addCleaning(item)" class="btn btn-outline-success">
+          <i class="fa fa-check" aria-hidden="true"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table *ngIf="loadedCleaning==1" class="table table-hover">
+  <thead>
+        <tr>
+          <th>Kto</th>
+          <th>Kiedy</th>
+        </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of filteredCleaning; let i = index">
+      <td>{{item.Cleaner.User.Login}}</td>
+      <td>{{item.Date}}</td>
+    </tr>
+  </tbody>
+</table>

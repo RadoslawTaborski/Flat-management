@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ShoppingItem } from './models/shoppingItem';
+import { ShoppingItem, DalShoppingItem, ShoppingItemMapper } from './models/shoppingItem';
 import { User } from './models/user';
 import { Balance } from './models/balance';
-import { Payment } from './models/payment';
+import { Payment, DalPayment, PaymentMapper } from './models/payment';
+import { CleaningMapper, DalCleaning } from './models/cleaning';
 
 const httpOptions = {
   headers: new HttpHeaders()
@@ -93,9 +94,10 @@ export class DbService {
       );
   }
 
-  addShoppingItem (item: ShoppingItem): Observable<any> {
-    console.log(JSON.stringify(item))
-    return this._http.post<any>(this.apiUrl+this._addShoppingItem, JSON.stringify(item), httpOptions)
+  addShoppingItem (item: DalShoppingItem): Observable<any> {
+    let json = ShoppingItemMapper.ConvertToJSONFromDAL(item);
+    //console.log(json);
+    return this._http.post<any>(this.apiUrl+this._addShoppingItem, json, httpOptions)
       .pipe(
         map((res: Response) => res)
       );
@@ -108,15 +110,19 @@ export class DbService {
       );
   }
 
-  addPayment (item: Payment): Observable<any> {
-    return this._http.post<any>(this.apiUrl+this._addPayment, JSON.stringify(item), httpOptions)
+  addPayment (item: DalPayment): Observable<any> {
+    let json = PaymentMapper.ConvertToJSONFromDAL(item);
+    //console.log(json);
+    return this._http.post<any>(this.apiUrl+this._addPayment, json, httpOptions)
       .pipe(
         map((res: Response) => res)
       );
   }
 
-  addCleaning (item: Payment): Observable<any> {
-    return this._http.post<any>(this.apiUrl+this._addCleaning, JSON.stringify(item), httpOptions)
+  addCleaning (item: DalCleaning): Observable<any> {
+    let json = CleaningMapper.ConvertToJSONFromDAL(item);
+    //console.log(json);
+    return this._http.post<any>(this.apiUrl+this._addCleaning, json , httpOptions)
       .pipe(
         map((res: Response) => res)
       );

@@ -2,7 +2,7 @@ import { User } from "./user";
 import { InstanceFinder } from "./instance.finder";
 
 export class ShoppingItem {
-    Id: number;
+    ID: number;
     User: User;
     Name: string;
     Category: string;
@@ -10,8 +10,8 @@ export class ShoppingItem {
     AddDate: string;
     BoughtDate: string;
     
-    constructor(Id: number, User:User, Name: string, Category: string, IsBought: number, AddDate: string, BoughtDate: string){
-        this.Id = Id;
+    constructor(ID: number, User:User, Name: string, Category: string, IsBought: number, AddDate: string, BoughtDate: string){
+        this.ID = ID;
         this.User=User;
         this.Name=Name;
         this.Category=Category;
@@ -43,11 +43,13 @@ export class DalShoppingItem{
 
 export class ShoppingItemMapper{
 	static ConvertToEntity(dal: DalShoppingItem, users: User[]): ShoppingItem{
-		return new ShoppingItem(dal.ID, InstanceFinder.getUserById(users, dal.Added),  dal.Name, dal.Category, dal.IsBought, dal.AddDate, dal.BoughtDate);
+		//console.log(dal)
+		return new ShoppingItem(dal.ID, InstanceFinder.getUserByID(users, dal.Added), dal.Name, dal.Category, dal.IsBought, dal.AddDate, dal.BoughtDate);
 	}
 	
 	static ConvertToDal(entity: ShoppingItem): DalShoppingItem{
-		return new DalShoppingItem(entity.Id, entity.User.Id, entity.Name, entity.Category, entity.IsBought, entity.AddDate, entity.BoughtDate);
+		//console.log(entity)
+		return new DalShoppingItem(entity.ID, entity.User.ID, entity.Name, entity.Category, entity.IsBought, entity.AddDate, entity.BoughtDate);
 	}
 	
 	static ConvertToDalFromJson(data: any): DalShoppingItem{

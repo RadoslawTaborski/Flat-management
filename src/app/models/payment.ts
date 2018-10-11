@@ -2,7 +2,7 @@ import { User } from "./user";
 import { InstanceFinder } from "./instance.finder";
 
 export class Payment {
-    Id: number;
+    ID: number;
     User1: User;
     User2: User;
     Name: string;
@@ -11,8 +11,8 @@ export class Payment {
     Action: number;
     AddDate: string
 
-    constructor(Id: number, User1:User, User2:User, Name: string, Value: number, IsReturn: number, Action: number, AddDate: string){
-        this.Id = Id;
+    constructor(ID: number, User1:User, User2:User, Name: string, Value: number, IsReturn: number, Action: number, AddDate: string){
+        this.ID = ID;
         this.User1=User1;
         this.User2=User2;
         this.Name=Name;
@@ -47,11 +47,11 @@ export class DalPayment{
 
 export class PaymentMapper{
 	static ConvertToEntity(dal: DalPayment, users: User[]): Payment{
-		return new Payment(dal.ID, InstanceFinder.getUserById(users, dal.User1ID), InstanceFinder.getUserById(users, dal.User2ID),  dal.Name,  dal.Amount, dal.IsReturn,  dal.Action, dal.Date);
+		return new Payment(dal.ID, InstanceFinder.getUserByID(users, dal.User1ID), InstanceFinder.getUserByID(users, dal.User2ID),  dal.Name,  dal.Amount, dal.IsReturn,  dal.Action, dal.Date);
 	}
 	
 	static ConvertToDal(entity: Payment): DalPayment{
-		return new DalPayment(entity.Id, entity.Name, entity.User1.Id, entity.User2.Id, entity.Value, entity.Action, entity.IsReturn, entity.AddDate);
+		return new DalPayment(entity.ID, entity.Name, entity.User1.ID, entity.User2.ID, entity.Value, entity.Action, entity.IsReturn, entity.AddDate);
 	}
 	
 	static ConvertToDalFromJson(data: any): DalPayment{

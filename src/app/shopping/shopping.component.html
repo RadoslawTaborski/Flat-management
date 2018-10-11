@@ -8,7 +8,7 @@
             </td>
             <td>  
                 <select [(ngModel)]="userFilter"  class="custom-select">
-                    <option *ngFor="let user of usersFilter" [value]="usersFilter.indexOf(user)">{{user}}</option>
+                    <option *ngFor="let user of getUsersFilterItems()" [value]="getUsersFilterItems().indexOf(user)">{{user}}</option>
                 </select>
             </td>
             <td>
@@ -20,7 +20,7 @@
     </tbody>
   </table>
 
-<table *ngIf="loadedUsers==1" class="table table-hover">
+<table *ngIf="loadedShopping==1" class="table table-hover">
   <thead>
         <tr>
           <th>Nazwa</th>
@@ -33,17 +33,17 @@
       <tr>
           <td><input class="form-control" id="name" placeholder="nazwa" [(ngModel)]="name"></td>
           <td>  
-              <select id="categories" [(ngModel)]="categoryId"  class="custom-select">
+              <select id="categories" [(ngModel)]="categoryID"  class="custom-select">
                   <option *ngFor="let category of categories" [value]="categories.indexOf(category)">{{category}}</option>
               </select>
           </td>
           <td>
-              <select [(ngModel)]="userId"  class="custom-select">
-                  <option *ngFor="let user of getUsersItems()" [value]="user.Id" >{{user.Login}}</option>
+              <select [(ngModel)]="userID"  class="custom-select">
+                  <option *ngFor="let user of getUsersItems()" [value]="user.ID" >{{user.Login}}</option>
               </select>
           </td>
           <td>
-            <button (click)="addShoppingItem(createShoppingItem(userId,name,categoryId))" class="btn btn-outline-success">
+            <button (click)="addShoppingItem(createShoppingItem(userID,name,categoryID))" class="btn btn-outline-success">
               <i class="fa fa-check" aria-hidden="true"></i>
             </button>
           </td>
@@ -51,7 +51,7 @@
     <tr *ngFor="let item of filteredShoppingItems; let i = index">
       <td>{{item.Name}}</td>
       <td>{{item.Category}}</td>
-      <td>{{getUserById(item.UserId).Login}}</td>
+      <td>{{item.User.Login}}</td>
       <td>
         <button (click)="removeShoppingItem(item)" class="btn btn-outline-danger">
           <i class="fa fa-times" aria-hidden="true"></i>

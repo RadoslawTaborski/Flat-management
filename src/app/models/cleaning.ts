@@ -2,12 +2,12 @@ import { Cleaner } from "./cleaner";
 import { InstanceFinder } from "./instance.finder";
 
 export class Cleaning{
-	Id: number;
+	ID: number;
 	Cleaner: Cleaner;
 	Date: string;
 	
-	constructor(Id: number, cleaner: Cleaner, date: string){
-		this.Id=Id;
+	constructor(ID: number, cleaner: Cleaner, date: string){
+		this.ID=ID;
 		this.Cleaner=cleaner;
 		this.Date=date;
 	}
@@ -27,11 +27,11 @@ export class DalCleaning{
 
 export class CleaningMapper{
 	static ConvertToEntity(dal: DalCleaning, cleaners: Cleaner[]): Cleaning{
-		return new Cleaning(dal.ID, InstanceFinder.getCleanerById(cleaners, dal.CleanerID),dal.Date);
+		return new Cleaning(dal.ID, InstanceFinder.getCleanerByID(cleaners, dal.CleanerID),dal.Date);
 	}
 	
 	static ConvertToDal(entity: Cleaning): DalCleaning{
-		return new DalCleaning(entity.Id, entity.Cleaner.Id, entity.Date);
+		return new DalCleaning(entity.ID, entity.Cleaner.ID, entity.Date);
 	}
 	
 	static ConvertToDalFromJson(data: any): DalCleaning{
