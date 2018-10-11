@@ -12,6 +12,7 @@ import { BalancesComponent } from './balances/balances.component';
 import { ContactComponent } from './contact/contact.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
+import { CleaningComponent } from './cleaning/cleaning.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { HttpClientModule } from '@angular/common/http';
     PaymentComponent,
     BalancesComponent,
     ContactComponent,
+    CleaningComponent,
   ],
   imports: [
     HttpClientModule,

@@ -13,7 +13,6 @@ import { SharedService } from '../shared.service'
 export class ShoppingComponent implements OnInit {
   categories: string[] = ["chemia", "spożywcze", "inne"];
   categoriesFilter: string[] = ["wszystkie","chemia", "spożywcze", "inne"];
-  usersFilter: string[] = [];
   userId: number=1;
   categoryId: number=0;
   name: string;
@@ -32,27 +31,28 @@ export class ShoppingComponent implements OnInit {
 
   ngOnInit() {
     this.loadedShopping=false;
-    this.loadedUsers=false;
     if(SharedService.users.length==0){
-      this.getUsers();
+      this.getData();
+    }else{    
+      this.getShoppingItems();
     }
-    
-    this.getShoppingItems();
   }
 
-  getUsers() {
+  getData() {
     SharedService.users=[];
     this._dbService.getUsers()
     .subscribe((res: any[]) => {
       res.forEach(elem => {
         SharedService.users.push(new User(Number(elem.ID),elem.Login))
       });
+      SharedService.usersFilters=[];
       console.log(SharedService.users)
-      this.usersFilter.push("wszyscy");
+      SharedService.usersFilters.push("wszyscy");
       SharedService.users.forEach(item => {
-        this.usersFilter.push(item.Login)
+        SharedService.usersFilters.push(item.Login)
       });
       this.loadedUsers=true;
+      this.getShoppingItems();
     })
   }
 
@@ -65,12 +65,17 @@ export class ShoppingComponent implements OnInit {
     return SharedService.users;
   }
 
+  getUsersFilterItems(): string[]{
+    return SharedService.usersFilters;
+  }
+
   getShoppingItems() {
     this.shoppingItems=[];
+    this.filteredShoppingItems=[];
     this._dbService.getShoppingItems()
     .subscribe((res: any[]) => {
       res.forEach(elem => {
-        this.shoppingItems.push(new ShoppingItem(Number(elem.ID),Number(elem.Added),elem.Name,elem.Category,elem.IsBought))
+        this.shoppingItems.push(new ShoppingItem(Number(elem.ID),this.getUserById(Number(elem.Added)),elem.Name,elem.Category,elem.IsBought, elem.AddDate, elem.BoughtDate))
       });
       console.log(this.shoppingItems)
       this.filteredShoppingItems=this.shoppingItems;
@@ -80,11 +85,11 @@ export class ShoppingComponent implements OnInit {
 
   createShoppingItem(user: number, name: string, category: number): ShoppingItem{
     console.log(user,name,category)
-    return new ShoppingItem(0,user, name ,this.categories[category],0);
+    return new ShoppingItem(0,this.getUserById(user), name ,this.categories[category],0,"","");
   }
 
   addShoppingItem(item: ShoppingItem) {
-    if(item.Name!="" && item.UserId!=0 && item.Category!=""){
+    if(item.Name!="" && item.User!=null && item.Category!=""){
     this._dbService.addShoppingItem(item)
       .subscribe(res => { this.getShoppingItems(); }, err => { this.submitError = true; })
     }
@@ -100,9 +105,9 @@ export class ShoppingComponent implements OnInit {
     if(user == 0 && category == 0){
       this.filteredShoppingItems=this.shoppingItems;
     }else if(user != 0 && category != 0) {
-      this.filteredShoppingItems=this.shoppingItems.filter(x => x.Category == this.categoriesFilter[category] && this.usersFilter[user] == this.getUserById(x.UserId).Login)
+      this.filteredShoppingItems=this.shoppingItems.filter(x => x.Category == this.categoriesFilter[category] && SharedService.usersFilters[user] == x.User.Login)
     }else if(user != 0){
-      this.filteredShoppingItems=this.shoppingItems.filter(x => this.usersFilter[user] == this.getUserById(x.UserId).Login)
+      this.filteredShoppingItems=this.shoppingItems.filter(x => SharedService.usersFilters[user] == x.User.Login)
     }else if(category != 0){
       this.filteredShoppingItems=this.shoppingItems.filter(x => x.Category == this.categoriesFilter[category])
     }

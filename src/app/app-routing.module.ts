@@ -5,6 +5,7 @@ import { ShoppingComponent } from './shopping/shopping.component';
 import { ContactComponent } from './contact/contact.component';
 import { PaymentComponent } from './payment/payment.component';
 import { BalancesComponent } from './balances/balances.component';
+import { CleaningComponent } from './cleaning/cleaning.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'shopping', pathMatch: 'full' },
@@ -12,6 +13,7 @@ export const routes: Routes = [
     { path: 'payment', component: PaymentComponent },
     { path: 'balances', component: BalancesComponent },
     { path: 'contact', component: ContactComponent },
+    { path: 'cleaning', component: CleaningComponent },
     { path: '**', redirectTo: 'shopping' }
 ];
 

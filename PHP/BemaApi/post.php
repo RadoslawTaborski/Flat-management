@@ -9,8 +9,9 @@ function postRequest($table, $key, $d){
     }
   }else{
     switch ($table) {
-      case 'item': $sql = "CALL AddShoppingItem('$d->UserId', '$d->Name', '$d->Category')";  break;
-	  case 'payment': $sql = "CALL AddPayment('$d->Id1', '$d->Id2', '$d->Name' ,'$d->Value', '$d->Return')";  break;
+      case 'addItem': $sql = "CALL AddShoppingItem('$d->UserId', '$d->Name', '$d->Category')";  break;
+	  case 'addPayment': $sql = "CALL AddPayment('$d->Id1', '$d->Id2', '$d->Name' ,'$d->Value', '$d->Return', '$d->Action')";  break;
+	  case 'addCleaning': $sql = "CALL AddCleaning('$d->CleanerId')";  break;
     }
   }
 
