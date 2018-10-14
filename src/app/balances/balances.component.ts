@@ -27,6 +27,8 @@ export class BalancesComponent implements OnInit {
 
   ngOnInit() {
     this.loadedBalances = false;
+    this.user1Filter = 0;
+    this.user2Filter = 0;
     if (SharedService.users.length == 0) {
       this.getData();
     } {

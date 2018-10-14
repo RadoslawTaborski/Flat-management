@@ -31,6 +31,8 @@ export class ShoppingComponent implements OnInit {
 
   ngOnInit() {
     this.loadedShopping = false;
+    this.userID = 1;
+    this.categoryID = 0;
     if (SharedService.users.length == 0) {
       this.getData();
     } else {

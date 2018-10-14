@@ -72,7 +72,7 @@ export class PaymentComponent implements OnInit {
     this.paymentsGroup = [];
     this._dbService.getLastActionNumber().subscribe(res => {
       let action = Number(res[0]["MAX(Action)"]);
-      for (let i = 1; i <= action; ++i) {
+      for (let i = action; i >0; --i) {
         let tmpPayments = payments.filter(x => x.Action == i);
         if (tmpPayments.length > 0) {
           this.paymentsGroup.push(new PaymentGroup(tmpPayments));
