@@ -63,6 +63,7 @@ export class PaymentComponent implements OnInit {
   }
 
   findSelected(user: User): number {
+    console.log(user)
     let tmp = this.selected.filter(x => x["0"] == user)[0];
     console.log(tmp);
     return this.selected.indexOf(tmp);
@@ -85,6 +86,7 @@ export class PaymentComponent implements OnInit {
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   getData() {
     SharedService.users = [];
+    this.selected = [];
     this._dbService.getUsers()
       .subscribe((res: any[]) => {
         res.forEach(elem => {
@@ -97,7 +99,6 @@ export class PaymentComponent implements OnInit {
         SharedService.users.forEach(item => {
           SharedService.usersFilters.push(item.Login)
         });
-        this.selected = [];
         SharedService.users.forEach(item => {
           this.selected.push([item, true]);
         })
