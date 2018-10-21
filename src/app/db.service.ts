@@ -25,13 +25,14 @@ export class DbService {
   private _balances: string = 'balances';
   private _cleaners: string = 'cleaners';
   private _cleanings: string = 'cleanings';
-  private _lastCleaning: string = 'lastCleaning';
-  private _paymentAction: string = 'paymentAction';
+  private _lastCleaning: string = 'lastcleaning';
+  private _paymentAction: string = 'paymentaction';
 
   private _addShoppingItem: string = 'addItem/';
   private _addPayment: string = 'addPayment/';
   private _addCleaning: string = 'addCleaning/';
   private _removeShoppingItem: string = 'removeItem/';
+  private _rollbackAction: string = 'rollbackAction/';
   
   private headers: Headers = new Headers();
 
@@ -105,6 +106,13 @@ export class DbService {
 
   removeShoppingItem(Id: number): Observable<any> {
     return this._http.post<any>(this.apiUrl+this._removeShoppingItem+Id, "", httpOptions)
+      .pipe(
+        map((res: Response) => res)
+      );
+  }
+
+  rollbackAction(Id: number): Observable<any> {
+    return this._http.post<any>(this.apiUrl+this._rollbackAction+Id, "", httpOptions)
       .pipe(
         map((res: Response) => res)
       );

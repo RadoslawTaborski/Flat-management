@@ -31,7 +31,7 @@
     </thead>
     <tbody>
         <tr>
-            <td><input class="form-control" id="name" placeholder="nazwa" [(ngModel)]="name"></td>
+            <td><input class="form-control" placeholder="nazwa" [(ngModel)]="name"></td>
             <td>
                 <select id="categories" [(ngModel)]="categoryID" class="custom-select">
                     <option *ngFor="let category of categories" [value]="categories.indexOf(category)">{{category}}</option>

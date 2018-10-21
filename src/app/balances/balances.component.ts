@@ -4,6 +4,7 @@ import { DbService } from '../db.service';
 import { SharedService } from '../shared.service'
 import { User, DalUser, UserMapper } from '../models/user';
 import { Payment, PaymentMapper } from '../models/payment';
+import { PaymentType } from '../models/payment.type';
 
 @Component({
   selector: 'app-balances',
@@ -17,7 +18,7 @@ export class BalancesComponent implements OnInit {
   usersFilter: string[] = [];
   user1Filter: number = 0;
   user2Filter: number = 0;
-  value: number[] = []
+  value: string[] = []
 
   submitError: boolean = false;
   loadedBalances: boolean = false;
@@ -95,7 +96,7 @@ export class BalancesComponent implements OnInit {
           this.balances.push(BalanceMapper.ConvertToEntity(tmp, SharedService.users))
         });
         for (let i = 0; i < this.balances.length; ++i) {
-          this.value.push(0);
+          this.value.push("0");
         }
         console.log(this.balances)
         this.filteredBalances = this.balances;
@@ -103,16 +104,19 @@ export class BalancesComponent implements OnInit {
       })
   }
 
-  addPayment(user1: User, user2: User, value: number) {
-    if (value > 0) {
+  addPayment(user1: User, user2: User, value: string) {
+    let val = SharedService.str2Int(value);
+    if (val > 0) {
       this._dbService.getLastActionNumber().subscribe(res => {
         //console.log(res[0]["MAX(Action)"]);
         let action = Number(res[0]["MAX(Action)"]) + 1;
-        let tmp = new Payment(0, user1, user2, "ZWROT", value, 1, action, "");
+        let tmp = new Payment(0, user1, user2, "ZWROT", val, PaymentType["return-cash"], action, "");
         this._dbService.addPayment(PaymentMapper.ConvertToDal(tmp))
           .subscribe(res => { this.getBalances(); }, err => { this.submitError = true; })
       });
+      for(let i=0; i<this.value.length;++i){
+        this.value[i]="0";
+      }
     }
   };
-
 }

@@ -6,11 +6,12 @@ function postRequest($table, $key, $d){
   if($key){
     switch ($table) {
       case 'removeItem': $sql = "CALL RemoveShoppingItem('$key')";  break;
+	  case 'rollbackAction': $sql = "CALL RollbackAction('$key')";  break;
     }
   }else{
     switch ($table) {
       case 'addItem': $sql = "CALL AddShoppingItem('$d->Added', '$d->Name', '$d->Category')";  break;
-	  case 'addPayment': $sql = "CALL AddPayment('$d->User1ID', '$d->User2ID', '$d->Name' ,'$d->Amount', '$d->IsReturn', '$d->Action')";  break;
+	  case 'addPayment': $sql = "CALL AddPayment('$d->User1ID', '$d->User2ID', '$d->Name' ,'$d->Amount', '$d->Type', '$d->Action')";  break;
 	  case 'addCleaning': $sql = "CALL AddCleaning('$d->CleanerID')";  break;
     }
   }

@@ -1,34 +1,46 @@
 export class User {
 	ID: number;
 	Login: string;
+	ShortName: string;
+	FullName: string;
+	BankAccount: string;
 
-	constructor(ID: number, Login: string) {
-		this.ID = ID;
-		this.Login = Login;
+	constructor(id: number, login: string, shortName: string, fullName: string, bankAccount: string) {
+		this.ID = id;
+		this.Login = login;
+		this.ShortName = shortName;
+		this.FullName = fullName;
+		this.BankAccount = bankAccount;
 	}
 }
 
 export class DalUser {
 	ID: number;
 	Login: string;
+	ShortName: string;
+	FullName: string;
+	BankAccount: string;
 
-	constructor(id: number, login: string) {
+	constructor(id: number, login: string, shortName: string, fullName: string, bankAccount: string) {
 		this.ID = id;
 		this.Login = login;
+		this.ShortName = shortName;
+		this.FullName = fullName;
+		this.BankAccount = bankAccount;
 	}
 }
 
 export class UserMapper {
 	static ConvertToEntity(dal: DalUser): User {
-		return new User(dal.ID, dal.Login);
+		return new User(dal.ID, dal.Login, dal.ShortName, dal.FullName, dal.BankAccount);
 	}
 
 	static ConvertToDal(entity: User): DalUser {
-		return new DalUser(entity.ID, entity.Login);
+		return new DalUser(entity.ID, entity.Login, entity.ShortName, entity.FullName, entity.BankAccount);
 	}
 
 	static ConvertToDalFromJson(data: any): DalUser {
-		return new DalUser(Number(data.ID), data.Login);
+		return new DalUser(Number(data.ID), data.Login, data.ShortName, data.FullName, data.BankAccount);
 	}
 
 	static ConvertToJSONFromDAL(dal: DalUser): string {

@@ -4,6 +4,8 @@ import { DbService } from '../db.service';
 import { SharedService } from '../shared.service'
 import { User, UserMapper } from '../models/user';
 import { forEach } from '@angular/router/src/utils/collection';
+import {formatDate} from '@angular/common';
+import { PaymentType } from '../models/payment.type';
 
 @Component({
   selector: 'app-payment',
@@ -19,7 +21,7 @@ export class PaymentComponent implements OnInit {
 
   userID: number = 1;
   name: string;
-  value: string;
+  value: string = "0";
   selectedUser: User[] = [];
 
   newPayment: Payment = null;
@@ -73,7 +75,7 @@ export class PaymentComponent implements OnInit {
     this.paymentsGroup = [];
     this._dbService.getLastActionNumber().subscribe(res => {
       let action = Number(res[0]["MAX(Action)"]);
-      for (let i = action; i >0; --i) {
+      for (let i = action; i > 0; --i) {
         let tmpPayments = payments.filter(x => x.Action == i);
         if (tmpPayments.length > 0) {
           this.paymentsGroup.push(new PaymentGroup(tmpPayments));
@@ -129,6 +131,12 @@ export class PaymentComponent implements OnInit {
       .subscribe(res => { this.getPayments(); }, err => { this.submitError = true; })
   };
 
+  rollback(item: PaymentGroup) {
+    console.log(item, item.Action)
+    this._dbService.rollbackAction(item.Action)
+      .subscribe(res => { this.getPayments(); }, err => { this.submitError = true; })
+  };
+
   countSelectedUsers(): number {
     let result = 0;
     this.selected.forEach(item => {
@@ -149,19 +157,28 @@ export class PaymentComponent implements OnInit {
     return result;
   }
 
-  addPayments(name: string, userID: number, value: number) {
+  addPayments(name: string, userID: number, value: string) {
+    console.log(value)
+    let amount = SharedService.str2Int(value);
     let count = this.countSelectedUsers();
-    if (count > 0 && value > 0 && name != "") {
+    if (count > 0 && amount > 0 && !SharedService.isNullOrWhiteSpace(name)) {
       let nr: number = count;
-      let val = Number((value / nr).toFixed(2));
+      let val = Number((amount / nr).toFixed(2));
       this._dbService.getLastActionNumber().subscribe(res => {
         //console.log(res[0]["MAX(Action)"]);
         let action = Number(res[0]["MAX(Action)"]) + 1;
         for (let u of this.getSelectedUsers()) {
-          let payment = new Payment(0, this.getUserByID(userID), u, name, val, 0, action, "");
+          let payment = new Payment(0, this.getUserByID(userID), u, name, val, PaymentType.expense, action, "");
           this.addPayment(payment);
         }
       });
+      this.value="0";
+      this.name="";
     }
+  }
+
+  checkDate(group: PaymentGroup): boolean {
+    let current = formatDate(new Date(), 'yyyy-MM-dd', 'en');
+    return group.AddDate==current;
   }
 }

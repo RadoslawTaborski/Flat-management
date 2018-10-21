@@ -118,9 +118,10 @@ export class ShoppingComponent implements OnInit {
   }
 
   addShoppingItem(item: ShoppingItem) {
-    if (item.Name != "" && item.User != null && item.Category != "") {
+    if (!SharedService.isNullOrWhiteSpace(item.Name) && item.User != null && item.Category != "") {
       this._dbService.addShoppingItem(ShoppingItemMapper.ConvertToDal(item))
         .subscribe(res => { this.getShoppingItems(); }, err => { this.submitError = true; })
+      this.name = "";
     }
   }
 }

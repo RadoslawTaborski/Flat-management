@@ -1,6 +1,6 @@
 <table *ngIf="loadedPayments==1" class="table table-hover">
     <tr>
-        <td><input class="form-control" id="name" placeholder="nazwa" [(ngModel)]="name"></td>
+        <td><input class="form-control" placeholder="nazwa" [(ngModel)]="name"></td>
         <td>
             <select [(ngModel)]="userID" class="custom-select">
                 <option *ngFor="let user of getUsersItems()" [value]="user.ID">{{user.Login}}</option>
@@ -13,7 +13,7 @@
                 </label>
             </div>
         </td>
-        <td><input class="form-control" id="name" placeholder="kwota" [(ngModel)]="value"></td>
+        <td><input class="form-control" placeholder="kwota" [(ngModel)]="value"></td>
         <td>
             <button (click)="addPayments(name,userID,value)" class="btn btn-outline-success">
                 <i class="fa fa-check" aria-hidden="true"></i>
@@ -29,6 +29,7 @@
             <th>Przypisani</th>
             <th>Kwota</th>
             <th>Data</th>
+            <th>Anuluj</th>
         </tr>
     </thead>
     <tbody>
@@ -38,6 +39,11 @@
             <td>{{item.getInitials()}}</td>
             <td>{{item.Value}}</td>
             <td>{{item.AddDate}}</td>
+            <td>
+                <button *ngIf="checkDate(item)" (click)="rollback(item)" class="btn btn-outline-primary">
+                    <i class="fa fa-undo" aria-hidden="true"></i>
+                </button>
+            </td>
         </tr>
     </tbody>
 </table>
