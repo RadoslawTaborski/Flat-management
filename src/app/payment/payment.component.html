@@ -40,11 +40,11 @@
         </ng-container>
         <ng-container *ngFor="let item of paymentsGroup; let i = index">
             <ng-container>
-                <label class="text-secondary" [style.width.%]="20">{{item.Name}}</label>
-                <label class="text-secondary" [style.width.%]="20">{{item.User1.Login}}</label>
-                <label class="text-secondary" [style.width.%]="15">{{item.getInitials()}}</label>
-                <label class="text-secondary" [style.width.%]="15">{{item.Value}}</label>
-                <label class="text-secondary" [style.width.%]="20">{{item.AddDate.substring(0,10)}}</label>
+                <label [style.width.%]="20">{{item.Name}}</label>
+                <label [style.width.%]="20">{{item.User1.Login}}</label>
+                <label [style.width.%]="15">{{item.getInitials()}}</label>
+                <label [style.width.%]="15">{{item.Value}}</label>
+                <label [style.width.%]="20">{{item.AddDate.substring(0,10)}}</label>
                 <button [style.width.%]="10" *ngIf="checkDate(item)" (click)="rollback(item)" class="btn btn-outline-danger">
                     <i class="fa fa-times" aria-hidden="true"></i>
                 </button>
@@ -95,9 +95,9 @@
         </ng-container>
         <ng-container *ngFor="let item of paymentsGroup; let i = index">
             <ng-container>
-                <label class="text-secondary" [style.width.%]="30">{{item.Name}}</label>
-                <label class="text-secondary" [style.width.%]="30">{{item.getInitials()}}</label>
-                <label class="text-secondary" [style.width.%]="20">{{item.Value}}</label>
+                <label [style.width.%]="30">{{item.Name}}</label>
+                <label [style.width.%]="30">{{item.getInitials()}}</label>
+                <label [style.width.%]="20">{{item.Value}}</label>
                 <button [style.width.%]="20" *ngIf="!det[i]" (click)="getDetails(i)" class="btn btn-outline-primary">
                     <i class="fa fa-arrow-down" aria-hidden="true"></i>
                 </button>
@@ -109,8 +109,8 @@
                     <button [style.width.%]="20" *ngIf="checkDate(item)" (click)="rollback(item)" class="btn btn-outline-danger float-right">
                         <i class="fa fa-times" aria-hidden="true"></i>
                     </button>
-                    <label class="text-secondary" [style.width.%]="40">Dodał: {{item.User1.Login}}</label>
-                    <label class="text-secondary" [style.width.%]="40">Data: {{item.AddDate.substring(0,10)}}</label>
+                    <label [style.width.%]="40">Dodał: {{item.User1.Login}}</label>
+                    <label [style.width.%]="40">Data: {{item.AddDate.substring(0,10)}}</label>
                 </div>
                 <hr/>
             </ng-container>

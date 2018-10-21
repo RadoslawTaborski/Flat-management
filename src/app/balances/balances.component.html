@@ -23,9 +23,9 @@
 
         <ng-container *ngFor="let item of filteredBalances; let i = index">
             <ng-container *ngIf="item.Value<0">
-                <label class="text-secondary" [style.width.%]="35">{{item.User1.Login}}</label>
-                <label class="text-secondary" [style.width.%]="35">{{item.User2.Login}}</label>
-                <label class="text-secondary" [style.width.%]="20">{{-1*item.Value}}</label>
+                <label [style.width.%]="35">{{item.User1.Login}}</label>
+                <label [style.width.%]="35">{{item.User2.Login}}</label>
+                <label [style.width.%]="20">{{-1*item.Value}}</label>
                 <button [style.width.%]="10" *ngIf="item.Value<0 && !ret[i]" (click)="setReturn(i)" class="btn btn-outline-primary">
                     <i class="fa fa-arrow-down" aria-hidden="true"></i>
                 </button>
@@ -37,8 +37,8 @@
                     <button [style.width.%]="10" *ngIf="item.Value<0" (click)="addPayment(item.User1,item.User2,value[i])" class="btn btn-outline-success float-right">
                         <i class="fa fa-check" aria-hidden="true"></i>
                     </button>
-                    <label class="text-secondary" [style.width.%]="10">Oddaje: </label>
-                    <label class="text-secondary" [style.width.%]="80"><input *ngIf="item.Value<0" class="form-control" placeholder="kwota" [(ngModel)]="value[i]"
+                    <label [style.width.%]="10">Oddaje: </label>
+                    <label [style.width.%]="80"><input *ngIf="item.Value<0" class="form-control" placeholder="kwota" [(ngModel)]="value[i]"
                             style="padding-top: 0.1em"></label>
                 </div>
                 <hr/>
@@ -75,9 +75,9 @@
 
         <ng-container *ngFor="let item of filteredBalances; let i = index">
             <ng-container *ngIf="item.Value<0">
-                <label class="text-secondary" [style.width.%]="30">{{item.User1.Login}}</label>
-                <label class="text-secondary" [style.width.%]="30">{{item.User2.Login}}</label>
-                <label class="text-secondary" [style.width.%]="20">{{-1*item.Value}}</label>
+                <label [style.width.%]="30">{{item.User1.Login}}</label>
+                <label [style.width.%]="30">{{item.User2.Login}}</label>
+                <label [style.width.%]="20">{{-1*item.Value}}</label>
                 <button [style.width.%]="20" *ngIf="item.Value<0 && !ret[i]" (click)="setReturn(i)" class="btn btn-outline-primary">
                     <i class="fa fa-arrow-down" aria-hidden="true"></i>
                 </button>
@@ -89,8 +89,8 @@
                     <button [style.width.%]="20" *ngIf="item.Value<0" (click)="addPayment(item.User1,item.User2,value[i])" class="btn btn-outline-success float-right">
                         <i class="fa fa-check" aria-hidden="true"></i>
                     </button>
-                    <label class="text-secondary" [style.width.%]="20">Oddaje: </label>
-                    <label class="text-secondary" [style.width.%]="60"><input *ngIf="item.Value<0" class="form-control" placeholder="kwota" [(ngModel)]="value[i]"
+                    <label [style.width.%]="20">Oddaje: </label>
+                    <label [style.width.%]="60"><input *ngIf="item.Value<0" class="form-control" placeholder="kwota" [(ngModel)]="value[i]"
                             style="padding-top: 0.1em"></label>
                 </div>
                 <hr/>
