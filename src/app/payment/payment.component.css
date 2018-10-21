@@ -6,3 +6,31 @@ hr {
     margin: 0.1em 0;
     padding: 0;
 }
+
+.check{
+    color: green;
+}
+
+.uncheck{
+    color: white;
+}
+
+.fieldB{
+    height: 100px;
+    width: 100px;
+    background-color: burlywood;
+    color: white;
+    border-style: solid;
+    border-color: black;
+    text-align: center;
+}
+
+.fieldC{
+    height: 100px;
+    width: 100px;
+    background-color: saddlebrown;
+    color: white;
+    border-style: solid;
+    border-color: black;
+    text-align: center;
+}

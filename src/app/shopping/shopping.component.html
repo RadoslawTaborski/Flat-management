@@ -6,7 +6,7 @@
         <select [style.width.%]="45" [(ngModel)]="userFilter" class="custom-select">
             <option *ngFor="let user of getUsersFilterItems()" [value]="getUsersFilterItems().indexOf(user)">{{user}}</option>
         </select>
-        <button [style.width.%]="10" (click)="filtering(userFilter,categoryFilter)" class="btn btn-outline-primary">
+        <button [style.width.%]="10" (click)="filtering(userFilter,categoryFilter)" class="btn btn-outline-info">
             <i class="fa fa-search" aria-hidden="true"></i>
         </button>
     </ng-container>
@@ -35,9 +35,9 @@
         </ng-container>
 
         <ng-container *ngFor="let item of filteredShoppingItems; let i = index">
-            <label [style.width.%]="40">{{item.Name}}</label>
-            <label [style.width.%]="25">{{item.Category}}</label>
-            <label [style.width.%]="25">{{item.User.Login}}</label>
+            <label class="text-secondary" [style.width.%]="40">{{item.Name}}</label>
+            <label class="text-secondary" [style.width.%]="25">{{item.Category}}</label>
+            <label class="text-secondary" [style.width.%]="25">{{item.User.Login}}</label>
             <button [style.width.%]="10" (click)="removeShoppingItem(item)" class="btn btn-outline-danger">
                 <i class="fa fa-times" aria-hidden="true"></i>
             </button>
@@ -86,8 +86,8 @@
         </ng-container>
 
         <ng-container *ngFor="let item of filteredShoppingItems; let i = index">
-            <label [style.width.%]="40">{{item.Name}}</label>
-            <label [style.width.%]="40">{{item.User.Login}}</label>
+            <label class="text-secondary" [style.width.%]="40">{{item.Name}}</label>
+            <label class="text-secondary" [style.width.%]="40">{{item.User.Login}}</label>
             <button [style.width.%]="20" (click)="removeShoppingItem(item)" class="btn btn-outline-danger">
                 <i class="fa fa-times" aria-hidden="true"></i>
             </button>

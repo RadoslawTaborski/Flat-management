@@ -6,7 +6,7 @@
         <select [style.width.%]="45" [(ngModel)]="user2Filter" class="custom-select">
             <option *ngFor="let user of getUsersFilterItems()" [value]="getUsersFilterItems().indexOf(user)">{{user}}</option>
         </select>
-        <button [style.width.%]="10" (click)="filtering(user1Filter,user2Filter)" class="btn btn-outline-primary">
+        <button [style.width.%]="10" (click)="filtering(user1Filter,user2Filter)" class="btn btn-outline-info">
             <i class="fa fa-search" aria-hidden="true"></i>
         </button>
     </ng-container>
@@ -23,9 +23,9 @@
 
         <ng-container *ngFor="let item of filteredBalances; let i = index">
             <ng-container *ngIf="item.Value<0">
-                <label [style.width.%]="35">{{item.User1.Login}}</label>
-                <label [style.width.%]="35">{{item.User2.Login}}</label>
-                <label [style.width.%]="20">{{-1*item.Value}}</label>
+                <label class="text-secondary" [style.width.%]="35">{{item.User1.Login}}</label>
+                <label class="text-secondary" [style.width.%]="35">{{item.User2.Login}}</label>
+                <label class="text-secondary" [style.width.%]="20">{{-1*item.Value}}</label>
                 <button [style.width.%]="10" *ngIf="item.Value<0 && !ret[i]" (click)="setReturn(i)" class="btn btn-outline-primary">
                     <i class="fa fa-arrow-down" aria-hidden="true"></i>
                 </button>
@@ -37,8 +37,8 @@
                     <button [style.width.%]="10" *ngIf="item.Value<0" (click)="addPayment(item.User1,item.User2,value[i])" class="btn btn-outline-success float-right">
                         <i class="fa fa-check" aria-hidden="true"></i>
                     </button>
-                    <label [style.width.%]="10">Oddaje: </label>
-                    <label [style.width.%]="80"><input *ngIf="item.Value<0" class="form-control" placeholder="kwota" [(ngModel)]="value[i]"
+                    <label class="text-secondary" [style.width.%]="10">Oddaje: </label>
+                    <label class="text-secondary" [style.width.%]="80"><input *ngIf="item.Value<0" class="form-control" placeholder="kwota" [(ngModel)]="value[i]"
                             style="padding-top: 0.1em"></label>
                 </div>
                 <hr/>
@@ -58,7 +58,7 @@
         <select [style.width.%]="40" [(ngModel)]="user2Filter" class="custom-select">
             <option *ngFor="let user of getUsersFilterItems()" [value]="getUsersFilterItems().indexOf(user)">{{user}}</option>
         </select>
-        <button [style.width.%]="20" (click)="filtering(user1Filter,user2Filter)" class="btn btn-outline-primary">
+        <button [style.width.%]="20" (click)="filtering(user1Filter,user2Filter)" class="btn btn-outline-info">
             <i class="fa fa-search" aria-hidden="true"></i>
         </button>
     </ng-container>
@@ -75,9 +75,9 @@
 
         <ng-container *ngFor="let item of filteredBalances; let i = index">
             <ng-container *ngIf="item.Value<0">
-                <label [style.width.%]="30">{{item.User1.Login}}</label>
-                <label [style.width.%]="30">{{item.User2.Login}}</label>
-                <label [style.width.%]="20">{{-1*item.Value}}</label>
+                <label class="text-secondary" [style.width.%]="30">{{item.User1.Login}}</label>
+                <label class="text-secondary" [style.width.%]="30">{{item.User2.Login}}</label>
+                <label class="text-secondary" [style.width.%]="20">{{-1*item.Value}}</label>
                 <button [style.width.%]="20" *ngIf="item.Value<0 && !ret[i]" (click)="setReturn(i)" class="btn btn-outline-primary">
                     <i class="fa fa-arrow-down" aria-hidden="true"></i>
                 </button>
@@ -85,12 +85,12 @@
                     <i class="fa fa-arrow-up" aria-hidden="true"></i>
                 </button>
 
-                <div *ngIf="ret[i]">
+                <div *ngIf="ret[i]" style="overflow: auto;">
                     <button [style.width.%]="20" *ngIf="item.Value<0" (click)="addPayment(item.User1,item.User2,value[i])" class="btn btn-outline-success float-right">
                         <i class="fa fa-check" aria-hidden="true"></i>
                     </button>
-                    <label [style.width.%]="20">Oddaje: </label>
-                    <label [style.width.%]="60"><input *ngIf="item.Value<0" class="form-control" placeholder="kwota" [(ngModel)]="value[i]"
+                    <label class="text-secondary" [style.width.%]="20">Oddaje: </label>
+                    <label class="text-secondary" [style.width.%]="60"><input *ngIf="item.Value<0" class="form-control" placeholder="kwota" [(ngModel)]="value[i]"
                             style="padding-top: 0.1em"></label>
                 </div>
                 <hr/>

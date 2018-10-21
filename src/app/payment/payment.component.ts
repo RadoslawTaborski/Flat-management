@@ -22,7 +22,7 @@ export class PaymentComponent implements OnInit {
 
   userID: number = 1;
   name: string;
-  value: string = "0";
+  value: string = "";
   selectedUser: User[] = [];
 
   newPayment: Payment = null;
@@ -51,6 +51,7 @@ export class PaymentComponent implements OnInit {
     if (SharedService.users.length == 0) {
       await this.getData();
     }
+    this.setCheckbox();
     await this.getPayments();
   }
 
@@ -117,6 +118,12 @@ export class PaymentComponent implements OnInit {
     this.det[nr]=!this.det[nr];
   }
 
+  setCheckbox(){
+    SharedService.users.forEach(item => {
+      this.selected.push([item, true]);
+    })
+  }
+
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   async groupPayments(payments: Payment[]) {
     this.det=[];
@@ -147,9 +154,6 @@ export class PaymentComponent implements OnInit {
     SharedService.users.forEach(item => {
       SharedService.usersFilters.push(item.Login)
     });
-    SharedService.users.forEach(item => {
-      this.selected.push([item, true]);
-    })
     this.loadedUsers = true;
   }
 
@@ -196,8 +200,9 @@ export class PaymentComponent implements OnInit {
         await this.addPayment(payment);
       }
       this.getPayments();
-      this.value = "0";
+      this.value = "";
       this.name = "";
+      this.add = false;
     }
   }
 }

@@ -109,7 +109,7 @@ export class BalancesComponent implements OnInit {
       this.balances.push(BalanceMapper.ConvertToEntity(tmp, SharedService.users))
     });
     for (let i = 0; i < this.balances.length; ++i) {
-      this.value.push("0");
+      this.value.push("");
       this.ret.push(false);
     }
     console.log(this.balances)
@@ -130,7 +130,7 @@ export class BalancesComponent implements OnInit {
       this.filtering(this.user1Filter,this.user2Filter);
 
       for (let i = 0; i < this.value.length; ++i) {
-        this.value[i] = "0";
+        this.value[i] = "";
         this.ret[i] = false;
       }
     }
