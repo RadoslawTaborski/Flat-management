@@ -1,49 +1,116 @@
-<table *ngIf="loadedPayments==1" class="table table-hover">
-    <tr>
-        <td><input class="form-control" placeholder="nazwa" [(ngModel)]="name"></td>
-        <td>
-            <select [(ngModel)]="userID" class="custom-select">
-                <option *ngFor="let user of getUsersItems()" [value]="user.ID">{{user.Login}}</option>
-            </select>
-        </td>
-        <td>
-            <div *ngFor="let user of getUsersItems()" class="form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" type="checkbox" (change)=selectUser(user) checked='selected[findSelected[user]]["1"]'>                    {{user.Login}}
+<ng-container *ngIf="isDesktop">
+    <ng-container *ngIf="loadedPayments==1">
+        <button [style.width.%]="100" *ngIf="!add" (click)="setAdd()" class="btn btn-outline-success">
+            <i class="fa fa-arrow-down" aria-hidden="true"></i>
+        </button>
+        <ng-container *ngIf="add">
+            <button [style.width.%]="100" (click)="setAdd()" class="btn btn-outline-success">
+                <i class="fa fa-arrow-up" aria-hidden="true"></i>
+            </button>
+            <br>
+            <div class="form-check form-check-inline">
+                <label *ngFor="let user of getUsersItems()" class="form-check-label" style="padding-right: 0.7em; padding-left: 0.1em">
+                    <input class="form-check-input" type="checkbox" (change)=selectUser(user) checked='selected[findSelected[user]]["1"]'>{{user.Login}}
                 </label>
             </div>
-        </td>
-        <td><input class="form-control" placeholder="kwota" [(ngModel)]="value"></td>
-        <td>
-            <button (click)="addPayments(name,userID,value)" class="btn btn-outline-success">
-                <i class="fa fa-check" aria-hidden="true"></i>
-            </button>
-        </td>
-    </tr>
-</table>
-<table *ngIf="loadedPayments==1" class="table table-hover">
-    <thead>
-        <tr>
-            <th>Nazwa</th>
-            <th>Dodał</th>
-            <th>Przypisani</th>
-            <th>Kwota</th>
-            <th>Data</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let item of paymentsGroup; let i = index">
-            <td>{{item.Name}}</td>
-            <td>{{item.User1.Login}}</td>
-            <td>{{item.getInitials()}}</td>
-            <td>{{item.Value}}</td>
-            <td>{{item.AddDate}}</td>
-            <td>
-                <button *ngIf="checkDate(item)" (click)="rollback(item)" class="btn btn-outline-danger">
+            <div>
+                <label [style.width.%]="40"><input class="form-control" placeholder="nazwa" [(ngModel)]="name" style="padding-top: 0.01em"></label>
+                <select [style.width.%]="30" [(ngModel)]="userID" class="custom-select">
+                    <option *ngFor="let user of getUsersItems()" [value]="user.ID">{{user.Login}}</option>
+                </select>
+                <label [style.width.%]="20"><input class="form-control" placeholder="kwota" [(ngModel)]="value" style="padding-top: 0.01em"></label>
+                <button [style.width.%]="10" (click)="addPayments(name,userID,value)" class="btn btn-outline-success">
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                </button>
+            </div>
+        </ng-container>
+    </ng-container>
+    <hr/>
+    <br/>
+    <ng-container *ngIf="loadedPayments==1">
+        <ng-container>
+            <label [style.width.%]="20" style="font-weight:bold">Nazwa</label>
+            <label [style.width.%]="20" style="font-weight:bold">Dodał</label>
+            <label [style.width.%]="15" style="font-weight:bold">Tyczy</label>
+            <label [style.width.%]="15" style="font-weight:bold">Kwota</label>
+            <label [style.width.%]="20" style="font-weight:bold">Data</label>
+            <hr/>
+        </ng-container>
+        <ng-container *ngFor="let item of paymentsGroup; let i = index">
+            <ng-container>
+                <label [style.width.%]="20">{{item.Name}}</label>
+                <label [style.width.%]="20">{{item.User1.Login}}</label>
+                <label [style.width.%]="15">{{item.getInitials()}}</label>
+                <label [style.width.%]="15">{{item.Value}}</label>
+                <label [style.width.%]="20">{{item.Data}}</label>
+                <button [style.width.%]="10" *ngIf="checkDate(item)" (click)="rollback(item)" class="btn btn-outline-danger">
                     <i class="fa fa-times" aria-hidden="true"></i>
                 </button>
-            </td>
-        </tr>
-    </tbody>
-</table>
+                <hr/>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+</ng-container>
+
+
+<ng-container *ngIf="isMobile">
+
+    <ng-container *ngIf="loadedPayments==1">
+        <button [style.width.%]="100" *ngIf="!add" (click)="setAdd()" class="btn btn-outline-success">
+            <i class="fa fa-arrow-down" aria-hidden="true"></i>
+        </button>
+        <ng-container *ngIf="add">
+            <button [style.width.%]="100" (click)="setAdd()" class="btn btn-outline-success">
+                <i class="fa fa-arrow-up" aria-hidden="true"></i>
+            </button>
+            <br>
+            <div class="form-check form-check-inline">
+                <label *ngFor="let user of getUsersItems()" class="form-check-label" style="padding-right: 0.7em; padding-left: 0.1em">
+                    <input class="form-check-input" type="checkbox" (change)=selectUser(user) checked='selected[findSelected[user]]["1"]'>{{user.Login}}
+                </label>
+            </div>
+            <label [style.width.%]="50"><input class="form-control" placeholder="nazwa" [(ngModel)]="name" style="padding-top: 0.01em"></label>
+            <select [style.width.%]="30" [(ngModel)]="userID" class="custom-select">
+                <option *ngFor="let user of getUsersItems()" [value]="user.ID">{{user.Login}}</option>
+            </select>
+            <label [style.width.%]="20"><input class="form-control" placeholder="kwota" [(ngModel)]="value" style="padding-top: 0.01em"></label>
+            <button [style.width.%]="100" (click)="addPayments(name,userID,value)" class="btn btn-outline-success">
+                <i class="fa fa-check" aria-hidden="true"></i>
+            </button>
+        </ng-container>
+    </ng-container>
+    <hr/>
+    <br/>
+    <ng-container *ngIf="loadedPayments==1">
+        <ng-container>
+            <label [style.width.%]="30" style="font-weight:bold">Nazwa</label>
+            <label [style.width.%]="30" style="font-weight:bold">Tyczy</label>
+            <label [style.width.%]="20" style="font-weight:bold">Kwota</label>
+            <label [style.width.%]="20" style="font-weight:bold">Akcja</label>
+            <hr/>
+        </ng-container>
+        <ng-container *ngFor="let item of paymentsGroup; let i = index">
+            <ng-container>
+                <label [style.width.%]="30">{{item.Name}}</label>
+                <label [style.width.%]="30">{{item.getInitials()}}</label>
+                <label [style.width.%]="20">{{item.Value}}</label>
+                <button [style.width.%]="20" *ngIf="!det[i]" (click)="getDetails(i)" class="btn btn-outline-primary">
+                    <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                </button>
+                <button [style.width.%]="20" *ngIf="det[i]" (click)="getDetails(i)" class="btn btn-outline-primary">
+                    <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                </button>
+
+                <div *ngIf="det[i]" style="overflow: auto;">
+                    <button [style.width.%]="20" *ngIf="checkDate(item)" (click)="rollback(item)" class="btn btn-outline-danger float-right">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                    <label [style.width.%]="40">Dodał: {{item.User1.Login}}</label>
+                    <label [style.width.%]="40">Data: {{item.AddDate.substring(0,10)}}</label>
+                </div>
+                <hr/>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+
+</ng-container>

@@ -1,37 +1,69 @@
-<table *ngIf="loadedCleaning==1" class="table table-hover">
-  <thead>
-    <tr>
-      <th>Kto</th>
-      <th>Ile razy</th>
-      <th>Ostatnio</th>
-      <th>Akcja</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let item of cleaners; let i = index">
-      <td>{{item.User.Login}}</td>
-      <td>{{item.Counter}}</td>
-      <td>{{item.LastTimeOfCleaning}}</td>
-      <td>
-        <button (click)="addCleaning(item)" class="btn btn-outline-success">
-          <i class="fa fa-check" aria-hidden="true"></i>
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<ng-container *ngIf="isDesktop">
 
-<table *ngIf="loadedCleaning==1" class="table table-hover">
-  <thead>
-    <tr>
-      <th>Kto</th>
-      <th>Kiedy</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let item of filteredCleaning; let i = index">
-      <td>{{item.Cleaner.User.Login}}</td>
-      <td>{{item.Date}}</td>
-    </tr>
-  </tbody>
-</table>
+    <ng-container *ngIf="loadedCleaning==1">
+        <ng-container>
+            <label [style.width.%]="30" style="font-weight:bold">Kto</label>
+            <label [style.width.%]="25" style="font-weight:bold">Ile razy</label>
+            <label [style.width.%]="35" style="font-weight:bold">Ostatnio</label>
+            <label [style.width.%]="10" style="font-weight:bold">Akcja</label>
+            <hr/>
+        </ng-container>
+        <ng-container *ngFor="let item of cleaners; let i = index">
+            <label [style.width.%]="30">{{item.User.Login}}</label>
+            <label [style.width.%]="25">{{item.Counter}}</label>
+            <label [style.width.%]="35">{{item.LastTimeOfCleaning}}</label>
+            <button [style.width.%]="10" (click)="addCleaning(item)" class="btn btn-outline-success">
+                <i class="fa fa-check" aria-hidden="true"></i>
+            </button>
+            <hr/>
+        </ng-container>
+        <br/><br/>
+        <ng-container>
+            <label [style.width.%]="50" style="font-weight:bold">Kto</label>
+            <label [style.width.%]="50" style="font-weight:bold">Kiedy</label>
+            <hr/>
+        </ng-container>
+        <ng-container *ngFor="let item of filteredCleaning; let i = index">
+            <label [style.width.%]="50">{{item.Cleaner.User.Login}}</label>
+            <label [style.width.%]="50">{{item.Date}}</label>
+            <hr/>
+        </ng-container>
+    </ng-container>
+
+</ng-container>
+
+
+<ng-container *ngIf="isMobile">
+
+    <ng-container *ngIf="loadedCleaning==1">
+        <ng-container>
+            <label [style.width.%]="30" style="font-weight:bold">Kto</label>
+            <label [style.width.%]="20" style="font-weight:bold">Ile razy</label>
+            <label [style.width.%]="30" style="font-weight:bold">Ostatnio</label>
+            <label [style.width.%]="20" style="font-weight:bold">Akcja</label>
+            <hr/>
+        </ng-container>
+        <ng-container *ngFor="let item of cleaners; let i = index">
+            <label [style.width.%]="30">{{item.User.Login}}</label>
+            <label [style.width.%]="20">{{item.Counter}}</label>
+            <label [style.width.%]="30">{{item.LastTimeOfCleaning}}</label>
+            <button [style.width.%]="20" (click)="addCleaning(item)" class="btn btn-outline-success">
+                <i class="fa fa-check" aria-hidden="true"></i>
+            </button>
+            <hr/>
+        </ng-container>
+        <br/>
+        <ng-container>
+            <label [style.width.%]="50" style="font-weight:bold">Kto</label>
+            <label [style.width.%]="50" style="font-weight:bold">Kiedy</label>
+            <hr/>
+        </ng-container>
+        <ng-container *ngFor="let item of filteredCleaning; let i = index">
+            <label [style.width.%]="50">{{item.Cleaner.User.Login}}</label>
+            <label [style.width.%]="50">{{item.Date}}</label>
+            <hr/>
+        </ng-container>
+    </ng-container>
+
+</ng-container>
+

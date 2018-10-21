@@ -1,48 +1,101 @@
-<table *ngIf="loadedBalances==1" class="table table-hover">
-    <tbody>
-        <tr>
-            <td>
-                <select [(ngModel)]="user1Filter" class="custom-select">
-                    <option *ngFor="let user of getUsersFilterItems()" [value]="getUsersFilterItems().indexOf(user)">{{user}}</option>
-                </select>
-            </td>
-            <td>
-                <select [(ngModel)]="user2Filter" class="custom-select">
-                    <option *ngFor="let user of getUsersFilterItems()" [value]="getUsersFilterItems().indexOf(user)">{{user}}</option>
-                </select>
-            </td>
-            <td>
-                <button (click)="filtering(user1Filter,user2Filter)" class="btn btn-outline-primary">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                </button>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<ng-container *ngIf="isDesktop">
+    <ng-container *ngIf="loadedBalances==1">
+        <select [style.width.%]="45" [(ngModel)]="user1Filter" class="custom-select">
+            <option *ngFor="let user of getUsersFilterItems()" [value]="getUsersFilterItems().indexOf(user)">{{user}}</option>
+        </select>
+        <select [style.width.%]="45" [(ngModel)]="user2Filter" class="custom-select">
+            <option *ngFor="let user of getUsersFilterItems()" [value]="getUsersFilterItems().indexOf(user)">{{user}}</option>
+        </select>
+        <button [style.width.%]="10" (click)="filtering(user1Filter,user2Filter)" class="btn btn-outline-primary">
+            <i class="fa fa-search" aria-hidden="true"></i>
+        </button>
+    </ng-container>
+    <hr/>
+    <br/>
+    <ng-container *ngIf="loadedBalances==1">
+        <ng-container>
+            <label [style.width.%]="35" style="font-weight:bold">Kto</label>
+            <label [style.width.%]="35" style="font-weight:bold">Komu</label>
+            <label [style.width.%]="20" style="font-weight:bold">Ile</label>
+            <label [style.width.%]="10" style="font-weight:bold">Akcja</label>
+            <hr/>
+        </ng-container>
 
-<table *ngIf="loadedBalances==1" class="table table-hover">
-    <thead>
-        <tr>
-            <th>Kto</th>
-            <th>Komu</th>
-            <th>Kwota</th>
-            <th>Oddaje</th>
-            <th>Zwrot</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let item of filteredBalances; let i = index">
+        <ng-container *ngFor="let item of filteredBalances; let i = index">
             <ng-container *ngIf="item.Value<0">
-            <td>{{item.User1.Login}}</td>
-            <td>{{item.User2.Login}}</td>
-            <td>{{-1*item.Value}}</td>
-            <td><input *ngIf="item.Value<0" class="form-control" placeholder="kwota" [(ngModel)]="value[i]"></td>
-            <td>
-                <button *ngIf="item.Value<0" (click)="addPayment(item.User1,item.User2,value[i])" class="btn btn-outline-success">
-                    <i class="fa fa-check" aria-hidden="true"></i>
+                <label [style.width.%]="35">{{item.User1.Login}}</label>
+                <label [style.width.%]="35">{{item.User2.Login}}</label>
+                <label [style.width.%]="20">{{-1*item.Value}}</label>
+                <button [style.width.%]="10" *ngIf="item.Value<0 && !ret[i]" (click)="setReturn(i)" class="btn btn-outline-primary">
+                    <i class="fa fa-arrow-down" aria-hidden="true"></i>
                 </button>
-            </td>
+                <button [style.width.%]="10" *ngIf="item.Value<0 && ret[i]" (click)="setReturn(i)" class="btn btn-outline-primary">
+                    <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                </button>
+
+                <div *ngIf="ret[i]">
+                    <button [style.width.%]="10" *ngIf="item.Value<0" (click)="addPayment(item.User1,item.User2,value[i])" class="btn btn-outline-success float-right">
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                    </button>
+                    <label [style.width.%]="10">Oddaje: </label>
+                    <label [style.width.%]="80"><input *ngIf="item.Value<0" class="form-control" placeholder="kwota" [(ngModel)]="value[i]"
+                            style="padding-top: 0.1em"></label>
+                </div>
+                <hr/>
             </ng-container>
-        </tr>
-    </tbody>
-</table>
+        </ng-container>
+    </ng-container>
+</ng-container>
+
+
+
+<ng-container *ngIf="isMobile">
+
+    <ng-container *ngIf="loadedBalances==1">
+        <select [style.width.%]="40" [(ngModel)]="user1Filter" class="custom-select">
+            <option *ngFor="let user of getUsersFilterItems()" [value]="getUsersFilterItems().indexOf(user)">{{user}}</option>
+        </select>
+        <select [style.width.%]="40" [(ngModel)]="user2Filter" class="custom-select">
+            <option *ngFor="let user of getUsersFilterItems()" [value]="getUsersFilterItems().indexOf(user)">{{user}}</option>
+        </select>
+        <button [style.width.%]="20" (click)="filtering(user1Filter,user2Filter)" class="btn btn-outline-primary">
+            <i class="fa fa-search" aria-hidden="true"></i>
+        </button>
+    </ng-container>
+    <hr/>
+    <br/>
+    <ng-container *ngIf="loadedBalances==1">
+        <ng-container>
+            <label [style.width.%]="30" style="font-weight:bold">Kto</label>
+            <label [style.width.%]="30" style="font-weight:bold">Komu</label>
+            <label [style.width.%]="20" style="font-weight:bold">Ile</label>
+            <label [style.width.%]="20" style="font-weight:bold">Akcja</label>
+            <hr/>
+        </ng-container>
+
+        <ng-container *ngFor="let item of filteredBalances; let i = index">
+            <ng-container *ngIf="item.Value<0">
+                <label [style.width.%]="30">{{item.User1.Login}}</label>
+                <label [style.width.%]="30">{{item.User2.Login}}</label>
+                <label [style.width.%]="20">{{-1*item.Value}}</label>
+                <button [style.width.%]="20" *ngIf="item.Value<0 && !ret[i]" (click)="setReturn(i)" class="btn btn-outline-primary">
+                    <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                </button>
+                <button [style.width.%]="20" *ngIf="item.Value<0 && ret[i]" (click)="setReturn(i)" class="btn btn-outline-primary">
+                    <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                </button>
+
+                <div *ngIf="ret[i]">
+                    <button [style.width.%]="20" *ngIf="item.Value<0" (click)="addPayment(item.User1,item.User2,value[i])" class="btn btn-outline-success float-right">
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                    </button>
+                    <label [style.width.%]="20">Oddaje: </label>
+                    <label [style.width.%]="60"><input *ngIf="item.Value<0" class="form-control" placeholder="kwota" [(ngModel)]="value[i]"
+                            style="padding-top: 0.1em"></label>
+                </div>
+                <hr/>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+
+</ng-container>

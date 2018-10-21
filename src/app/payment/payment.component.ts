@@ -6,6 +6,7 @@ import { User, UserMapper } from '../models/user';
 import { forEach } from '@angular/router/src/utils/collection';
 import { formatDate } from '@angular/common';
 import { PaymentType } from '../models/payment.type';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-payment',
@@ -29,10 +30,23 @@ export class PaymentComponent implements OnInit {
   submitError: boolean = false;
   loadedPayments: boolean = false;
   loadedUsers: boolean = false;
+  add: boolean = false;
+  det: boolean[] = [];
 
-  constructor(private _dbService: DbService) { }
+  deviceInfo= null;
+  isMobile = false;
+  isDesktop = false;
+
+  constructor(private _dbService: DbService, private deviceService: DeviceDetectorService) {}
+
+  public detectDevice(){
+    this.deviceInfo = this.deviceService.getDeviceInfo();
+    this.isMobile=this.deviceService.isMobile();
+    this.isDesktop=this.deviceService.isDesktop();
+  }
 
   async ngOnInit() {
+    this.detectDevice();
     this.loadedPayments = false;
     if (SharedService.users.length == 0) {
       await this.getData();
@@ -41,6 +55,10 @@ export class PaymentComponent implements OnInit {
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  setAdd(){
+    this.add=!this.add;
+  }
 
   getUserByID(id: number): User {
     var a = SharedService.users.filter(x => x.ID == id)[0];
@@ -91,12 +109,17 @@ export class PaymentComponent implements OnInit {
   }
 
   checkDate(group: PaymentGroup): boolean {
-    let current = formatDate(new Date(), 'yyyy-MM-dd', 'en');
-    return group.AddDate == current;
+    let current = formatDate(new Date().setMinutes(new Date().getMinutes()-15), 'yyyy-MM-dd HH:mm:ss', 'en');
+    return group.AddDate > current;
+  }
+
+  getDetails(nr:number){
+    this.det[nr]=!this.det[nr];
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   async groupPayments(payments: Payment[]) {
+    this.det=[];
     this.paymentsGroup = [];
     let res = await this._dbService.getLastActionNumber();
     let action = Number(res[0]["MAX(Action)"]);
@@ -104,6 +127,7 @@ export class PaymentComponent implements OnInit {
       let tmpPayments = payments.filter(x => x.Action == i);
       if (tmpPayments.length > 0) {
         this.paymentsGroup.push(new PaymentGroup(tmpPayments));
+        this.det.push(false);
       }
     }
     console.log(this.paymentsGroup);
@@ -142,6 +166,7 @@ export class PaymentComponent implements OnInit {
 
     this.groupPayments(this.filteredPayments);
     this.loadedPayments = true;
+    this.add=false;
   }
 
   async addPayment(item: Payment) {

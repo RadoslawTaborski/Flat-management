@@ -27,6 +27,7 @@ export class PaymentGroup {
 				this.Users.push(item.User2);
 				this.Value += item.Value;
 			});
+			this.Value = Number(this.Value.toFixed(2));
 		}
 	}
 
@@ -58,7 +59,7 @@ export class Payment {
 		this.User1 = User1;
 		this.User2 = User2;
 		this.Name = Name;
-		this.Value = Value;
+		this.Value = Number(Value.toFixed(2));
 		this.Type = type;
 		this.Action = Action;
 		this.AddDate = AddDate;
@@ -79,7 +80,7 @@ export class DalPayment {
 		this.ID = id;
 		this.User1ID = user1ID;
 		this.User2ID = user2ID;
-		this.Amount = amount;
+		this.Amount = Number(amount.toFixed(2));;
 		this.Action = action;
 		this.Type = type;
 		this.Date = date;

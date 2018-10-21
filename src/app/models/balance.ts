@@ -11,7 +11,7 @@ export class Balance {
 		this.ID = ID;
 		this.User1 = User1;
 		this.User2 = User2;
-		this.Value = Value;
+		this.Value = Number(Value.toFixed(2));;
 	}
 }
 
@@ -25,7 +25,7 @@ export class DalBalance {
 		this.ID = id;
 		this.User1ID = user1ID;
 		this.User2ID = user2ID;
-		this.Value = value;
+		this.Value = Number(value.toFixed(2));;
 	}
 }
 

@@ -4,6 +4,7 @@ import { DbService } from '../db.service';
 import { User, UserMapper } from '../models/user';
 import { Cleaner, CleanerMapper } from '../models/cleaner';
 import { Cleaning, CleaningMapper } from '../models/cleaning';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-cleaning',
@@ -20,9 +21,20 @@ export class CleaningComponent implements OnInit {
   filteredCleaning: Cleaning[] = [];
   submitError: boolean;
 
-  constructor(private _dbService: DbService) { }
+  deviceInfo= null;
+  isMobile = false;
+  isDesktop = false;
+
+  constructor(private _dbService: DbService, private deviceService: DeviceDetectorService) {}
+
+  public detectDevice(){
+    this.deviceInfo = this.deviceService.getDeviceInfo();
+    this.isMobile=this.deviceService.isMobile();
+    this.isDesktop=this.deviceService.isDesktop();
+  }
 
   async ngOnInit() {
+    this.detectDevice();
     this.loadedCleaning = false;
     if (this.cleaners.length == 0) {
       await this.getData();

@@ -5,6 +5,7 @@ import { SharedService } from '../shared.service'
 import { User, DalUser, UserMapper } from '../models/user';
 import { Payment, PaymentMapper } from '../models/payment';
 import { PaymentType } from '../models/payment.type';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-balances',
@@ -23,10 +24,22 @@ export class BalancesComponent implements OnInit {
   submitError: boolean = false;
   loadedBalances: boolean = false;
   loadedUsers: boolean = false;
+  ret: boolean[] = [];
 
-  constructor(private _dbService: DbService) { }
+  deviceInfo= null;
+  isMobile = false;
+  isDesktop = false;
+
+  constructor(private _dbService: DbService, private deviceService: DeviceDetectorService) {}
+
+  public detectDevice(){
+    this.deviceInfo = this.deviceService.getDeviceInfo();
+    this.isMobile=this.deviceService.isMobile();
+    this.isDesktop=this.deviceService.isDesktop();
+  }
 
   async ngOnInit() {
+    this.detectDevice();
     this.loadedBalances = false;
     this.user1Filter = 0;
     this.user2Filter = 0;
@@ -34,6 +47,7 @@ export class BalancesComponent implements OnInit {
       await this.getData();
     }
     await this.getBalances();
+    this.filtering(this.user1Filter,this.user2Filter);
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,6 +78,10 @@ export class BalancesComponent implements OnInit {
     }
   }
 
+  setReturn(nr: number){
+    this.ret[nr]=!this.ret[nr];
+  }
+
   /////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async getData() {
@@ -92,10 +110,10 @@ export class BalancesComponent implements OnInit {
     });
     for (let i = 0; i < this.balances.length; ++i) {
       this.value.push("0");
+      this.ret.push(false);
     }
     console.log(this.balances)
     this.filteredBalances = this.balances;
-
     this.loadedBalances = true;
   }
 
@@ -108,10 +126,12 @@ export class BalancesComponent implements OnInit {
       let tmp = new Payment(0, user1, user2, "ZWROT", val, PaymentType["return-cash"], action, "");
 
       await this._dbService.addPayment(PaymentMapper.ConvertToDal(tmp));
-      this.getBalances();
+      await this.getBalances();
+      this.filtering(this.user1Filter,this.user2Filter);
 
       for (let i = 0; i < this.value.length; ++i) {
         this.value[i] = "0";
+        this.ret[i] = false;
       }
     }
   };
