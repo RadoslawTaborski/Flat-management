@@ -19,6 +19,8 @@ export class CleaningComponent implements OnInit {
   loadedUsers: boolean = false;
   loadedCleaners: boolean = false;
   filteredCleaning: Cleaning[] = [];
+  delay: number = 0;
+  date: string = "" ;
   submitError: boolean;
 
   deviceInfo= null;
@@ -39,12 +41,35 @@ export class CleaningComponent implements OnInit {
     if (this.cleaners.length == 0) {
       await this.getData();
     }
+    await this.setDateOfNextCleaning();
     await this.getCleaners();
     await this.getCleaning();
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  getNextCleaners(): Cleaner[]{
+    let result:Cleaner[]=[];
+    let counter = this.cleaners[0].Counter;
+    let date = this.cleaners[0].LastTimeOfCleaning;
+
+    this.cleaners.forEach(element => {
+      if(element.Counter==counter && date == element.LastTimeOfCleaning){
+        result.push(element);
+      }
+    });
+    return result;
+  }
+
+  getNextCleanersString(): string{
+    let cleaners = this.getNextCleaners();
+    let result = "";
+    cleaners.forEach(element => {
+      result += element.User.Login+ " lub ";
+    });
+    result = result.substring(0,result.length-5);
+    return result;
+  }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -95,4 +120,16 @@ export class CleaningComponent implements OnInit {
     this.getCleaners();
   }
 
+  async setDateOfNextCleaning(){
+    let res = await this._dbService.getLastCleaningDate();
+    let date=res[0].Date;
+    let newDate = new Date(new Date(date).getTime() + (1000 * 60 * 60 * 24*7));
+    let currentDate = new Date();
+    if(currentDate>newDate){
+      this.delay=  Math.ceil(Math.abs(currentDate.getTime()-newDate.getTime()) / (1000 * 3600 * 24));
+    }
+
+    this.date = newDate.toLocaleDateString();
+    console.log(this.delay);
+  }
 }

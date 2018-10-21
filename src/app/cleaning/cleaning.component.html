@@ -2,6 +2,11 @@
 
     <ng-container *ngIf="loadedCleaning==1">
         <ng-container>
+            <h2 *ngIf="delay>0" class="text-danger" [style.width.%]="100" style="font-weight:bold">Opóźnienie!!! - dni: {{delay}} </h2>
+            <h3 class="text-danger" [style.width.%]="100" style="font-weight:bold">Następne sprzątanie: {{date}} - {{getNextCleanersString()}}</h3>
+            <br/>
+        </ng-container>
+        <ng-container>
             <label [style.width.%]="30" style="font-weight:bold">Kto</label>
             <label [style.width.%]="25" style="font-weight:bold">Ile razy</label>
             <label [style.width.%]="35" style="font-weight:bold">Ostatnio</label>
@@ -36,6 +41,11 @@
 <ng-container *ngIf="isMobile">
 
     <ng-container *ngIf="loadedCleaning==1">
+        <ng-container>
+            <h2 *ngIf="delay>0" class="text-danger" [style.width.%]="100" style="font-weight:bold">Opóźnienie!!! - dni: {{delay}} </h2>
+            <h3 class="text-danger" [style.width.%]="100" style="font-weight:bold">Następne sprzątanie: {{date}} - {{getNextCleanersString()}}</h3>
+            <br/>
+        </ng-container>
         <ng-container>
             <label [style.width.%]="30" style="font-weight:bold">Kto</label>
             <label [style.width.%]="20" style="font-weight:bold">Ile razy</label>
