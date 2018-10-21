@@ -33,107 +33,71 @@ export class DbService {
   private _addCleaning: string = 'addCleaning/';
   private _removeShoppingItem: string = 'removeItem/';
   private _rollbackAction: string = 'rollbackAction/';
-  
-  private headers: Headers = new Headers();
+  private _rollback: string = 'rollback/';
 
   constructor(private _http: HttpClient) {
   }
 
-   getShoppingItems (): Observable<any[]> {
-    return this._http.get<any[]>(this.apiUrl+this._shoppingItems)
-      .pipe(
-        map((res: Response) => res)  
-      );
+   getShoppingItems (): Promise<any[]> {
+    return this._http.get<any[]>(this.apiUrl+this._shoppingItems).toPromise();
   }
 
-  getUsers (): Observable<any[]> {
-    return this._http.get<any[]>(this.apiUrl+this._users)
-      .pipe(
-        map((res: Response) => res)  
-      );
+  getUsers (): Promise<any[]> {
+    return this._http.get<any[]>(this.apiUrl+this._users).toPromise();
   }
 
-  getPayments (): Observable<any[]> {
-    return this._http.get<any[]>(this.apiUrl+this._payments)
-      .pipe(
-        map((res: Response) => res)  
-      );
+  getPayments (): Promise<any[]> {
+    return this._http.get<any[]>(this.apiUrl+this._payments).toPromise();
   }
 
-  getBalances (): Observable<any[]> {
-    return this._http.get<any[]>(this.apiUrl+this._balances)
-      .pipe(
-        map((res: Response) => res)  
-      );
+  getBalances (): Promise<any[]> {
+    return this._http.get<any[]>(this.apiUrl+this._balances).toPromise();
   }
 
-  getCleaners (): Observable<any[]> {
-    return this._http.get<any[]>(this.apiUrl+this._cleaners)
-      .pipe(
-        map((res: Response) => res)  
-      );
+  getCleaners (): Promise<any[]> {
+    return this._http.get<any[]>(this.apiUrl+this._cleaners).toPromise();
   }
 
-  getCleaning (): Observable<any[]> {
-    return this._http.get<any[]>(this.apiUrl+this._cleanings)
-      .pipe(
-        map((res: Response) => res)  
-      );
+  getCleaning (): Promise<any[]> {
+    return this._http.get<any[]>(this.apiUrl+this._cleanings).toPromise();
   }
 
-  getLastCleaningDate (): Observable<any[]> {
-    return this._http.get<any[]>(this.apiUrl+this._lastCleaning)
-      .pipe(
-        map((res: Response) => res)  
-      );
+  getLastCleaningDate (): Promise<any[]> {
+    return this._http.get<any[]>(this.apiUrl+this._lastCleaning).toPromise();
   }
 
-  getLastActionNumber (): Observable<any[]> {
-    return this._http.get<any[]>(this.apiUrl+this._paymentAction)
-      .pipe(
-        map((res: Response) => res)  
-      );
+  getLastActionNumber (): Promise<any[]> {
+    return this._http.get<any[]>(this.apiUrl+this._paymentAction).toPromise();
   }
 
-  addShoppingItem (item: DalShoppingItem): Observable<any> {
+  addShoppingItem (item: DalShoppingItem): Promise<any> {
     let json = ShoppingItemMapper.ConvertToJSONFromDAL(item);
     //console.log(json);
-    return this._http.post<any>(this.apiUrl+this._addShoppingItem, json, httpOptions)
-      .pipe(
-        map((res: Response) => res)
-      );
+    return this._http.post<any>(this.apiUrl+this._addShoppingItem, json, httpOptions).toPromise();
   }
 
-  removeShoppingItem(Id: number): Observable<any> {
-    return this._http.post<any>(this.apiUrl+this._removeShoppingItem+Id, "", httpOptions)
-      .pipe(
-        map((res: Response) => res)
-      );
+  removeShoppingItem(Id: number): Promise<any> {
+    return this._http.post<any>(this.apiUrl+this._removeShoppingItem+Id, "", httpOptions).toPromise();
   }
 
-  rollbackAction(Id: number): Observable<any> {
-    return this._http.post<any>(this.apiUrl+this._rollbackAction+Id, "", httpOptions)
-      .pipe(
-        map((res: Response) => res)
-      );
+  rollbackAction(Id: number): Promise<any> {
+    return this._http.post<any>(this.apiUrl+this._rollbackAction+Id, "", httpOptions).toPromise();
   }
 
-  addPayment (item: DalPayment): Observable<any> {
+  rollback(Id: number): Promise<any> {
+    return this._http.post<any>(this.apiUrl+this._rollback+Id, "", httpOptions).toPromise();
+  }
+
+  addPayment (item: DalPayment): Promise<any> {
     let json = PaymentMapper.ConvertToJSONFromDAL(item);
     //console.log(json);
-    return this._http.post<any>(this.apiUrl+this._addPayment, json, httpOptions)
-      .pipe(
-        map((res: Response) => res)
-      );
+    return this._http.post<any>(this.apiUrl+this._addPayment, json, httpOptions).toPromise();
   }
 
-  addCleaning (item: DalCleaning): Observable<any> {
+  addCleaning (item: DalCleaning): Promise<any> {
     let json = CleaningMapper.ConvertToJSONFromDAL(item);
     //console.log(json);
-    return this._http.post<any>(this.apiUrl+this._addCleaning, json , httpOptions)
-      .pipe(
-        map((res: Response) => res)
-      );
+    return this._http.post<any>(this.apiUrl+this._addCleaning, json , httpOptions).toPromise();
   }
 }
 

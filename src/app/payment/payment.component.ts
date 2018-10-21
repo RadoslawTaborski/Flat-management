@@ -4,7 +4,7 @@ import { DbService } from '../db.service';
 import { SharedService } from '../shared.service'
 import { User, UserMapper } from '../models/user';
 import { forEach } from '@angular/router/src/utils/collection';
-import {formatDate} from '@angular/common';
+import { formatDate } from '@angular/common';
 import { PaymentType } from '../models/payment.type';
 
 @Component({
@@ -32,13 +32,12 @@ export class PaymentComponent implements OnInit {
 
   constructor(private _dbService: DbService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.loadedPayments = false;
     if (SharedService.users.length == 0) {
-      this.getData();
-    } else {
-      this.getPayments();
+      await this.getData();
     }
+    await this.getPayments();
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,72 +70,6 @@ export class PaymentComponent implements OnInit {
     return this.selected.indexOf(tmp);
   }
 
-  groupPayments(payments: Payment[]) {
-    this.paymentsGroup = [];
-    this._dbService.getLastActionNumber().subscribe(res => {
-      let action = Number(res[0]["MAX(Action)"]);
-      for (let i = action; i > 0; --i) {
-        let tmpPayments = payments.filter(x => x.Action == i);
-        if (tmpPayments.length > 0) {
-          this.paymentsGroup.push(new PaymentGroup(tmpPayments));
-        }
-      }
-      console.log(this.paymentsGroup);
-    });
-  }
-
-  /////////////////////////////////////////////////////////////////////////////////////////////////////
-  getData() {
-    SharedService.users = [];
-    this.selected = [];
-    this._dbService.getUsers()
-      .subscribe((res: any[]) => {
-        res.forEach(elem => {
-          let tmp = UserMapper.ConvertToDalFromJson(elem);
-          SharedService.users.push(UserMapper.ConvertToEntity(tmp))
-        });
-        console.log(SharedService.users)
-        SharedService.usersFilters = [];
-        SharedService.usersFilters.push("wszyscy");
-        SharedService.users.forEach(item => {
-          SharedService.usersFilters.push(item.Login)
-        });
-        SharedService.users.forEach(item => {
-          this.selected.push([item, true]);
-        })
-        this.loadedUsers = true;
-        this.getPayments();
-      })
-  }
-
-  getPayments() {
-    this._dbService.getPayments()
-      .subscribe((res: any[]) => {
-        this.payments = [];
-        this.filteredPayments = [];
-        res.forEach(elem => {
-          let tmp = PaymentMapper.ConvertToDalFromJson(elem);
-          this.payments.push(PaymentMapper.ConvertToEntity(tmp, SharedService.users))
-        });
-        console.log(this.payments)
-        this.filteredPayments = this.payments;
-
-        this.groupPayments(this.filteredPayments);
-        this.loadedPayments = true;
-      })
-  }
-
-  addPayment(item: Payment) {
-    this._dbService.addPayment(PaymentMapper.ConvertToDal(item))
-      .subscribe(res => { this.getPayments(); }, err => { this.submitError = true; })
-  };
-
-  rollback(item: PaymentGroup) {
-    console.log(item, item.Action)
-    this._dbService.rollbackAction(item.Action)
-      .subscribe(res => { this.getPayments(); }, err => { this.submitError = true; })
-  };
-
   countSelectedUsers(): number {
     let result = 0;
     this.selected.forEach(item => {
@@ -157,28 +90,89 @@ export class PaymentComponent implements OnInit {
     return result;
   }
 
-  addPayments(name: string, userID: number, value: string) {
+  checkDate(group: PaymentGroup): boolean {
+    let current = formatDate(new Date(), 'yyyy-MM-dd', 'en');
+    return group.AddDate == current;
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+  async groupPayments(payments: Payment[]) {
+    this.paymentsGroup = [];
+    let res = await this._dbService.getLastActionNumber();
+    let action = Number(res[0]["MAX(Action)"]);
+    for (let i = action; i > 0; --i) {
+      let tmpPayments = payments.filter(x => x.Action == i);
+      if (tmpPayments.length > 0) {
+        this.paymentsGroup.push(new PaymentGroup(tmpPayments));
+      }
+    }
+    console.log(this.paymentsGroup);
+  }
+
+  async getData() {
+    SharedService.users = [];
+    this.selected = [];
+    let res = await this._dbService.getUsers()
+    res.forEach(elem => {
+      let tmp = UserMapper.ConvertToDalFromJson(elem);
+      SharedService.users.push(UserMapper.ConvertToEntity(tmp))
+    });
+    console.log(SharedService.users)
+    SharedService.usersFilters = [];
+    SharedService.usersFilters.push("wszyscy");
+    SharedService.users.forEach(item => {
+      SharedService.usersFilters.push(item.Login)
+    });
+    SharedService.users.forEach(item => {
+      this.selected.push([item, true]);
+    })
+    this.loadedUsers = true;
+  }
+
+  async getPayments() {
+    let res = await this._dbService.getPayments()
+    this.payments = [];
+    this.filteredPayments = [];
+    res.forEach(elem => {
+      let tmp = PaymentMapper.ConvertToDalFromJson(elem);
+      this.payments.push(PaymentMapper.ConvertToEntity(tmp, SharedService.users))
+    });
+    console.log(this.payments)
+    this.filteredPayments = this.payments;
+
+    this.groupPayments(this.filteredPayments);
+    this.loadedPayments = true;
+  }
+
+  async addPayment(item: Payment) {
+    await this._dbService.addPayment(PaymentMapper.ConvertToDal(item))
+  };
+
+  async rollback(item: PaymentGroup) {
+    console.log(item, item.Action)
+    item.Payments.forEach(async element => {
+      await this._dbService.rollback(element.ID);
+    });
+    this.getPayments();
+  };
+
+  async addPayments(name: string, userID: number, value: string) {
     console.log(value)
     let amount = SharedService.str2Int(value);
     let count = this.countSelectedUsers();
     if (count > 0 && amount > 0 && !SharedService.isNullOrWhiteSpace(name)) {
       let nr: number = count;
       let val = Number((amount / nr).toFixed(2));
-      this._dbService.getLastActionNumber().subscribe(res => {
-        //console.log(res[0]["MAX(Action)"]);
-        let action = Number(res[0]["MAX(Action)"]) + 1;
-        for (let u of this.getSelectedUsers()) {
-          let payment = new Payment(0, this.getUserByID(userID), u, name, val, PaymentType.expense, action, "");
-          this.addPayment(payment);
-        }
-      });
-      this.value="0";
-      this.name="";
+      let res = await this._dbService.getLastActionNumber();
+      //console.log(res[0]["MAX(Action)"]);
+      let action = Number(res[0]["MAX(Action)"]) + 1;
+      for (let u of this.getSelectedUsers()) {
+        let payment = new Payment(0, this.getUserByID(userID), u, name, val, PaymentType.expense, action, "");
+        await this.addPayment(payment);
+      }
+      this.getPayments();
+      this.value = "0";
+      this.name = "";
     }
-  }
-
-  checkDate(group: PaymentGroup): boolean {
-    let current = formatDate(new Date(), 'yyyy-MM-dd', 'en');
-    return group.AddDate==current;
   }
 }

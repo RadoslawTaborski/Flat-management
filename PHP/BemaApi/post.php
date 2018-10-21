@@ -7,6 +7,7 @@ function postRequest($table, $key, $d){
     switch ($table) {
       case 'removeItem': $sql = "CALL RemoveShoppingItem('$key')";  break;
 	  case 'rollbackAction': $sql = "CALL RollbackAction('$key')";  break;
+	  case 'rollback': $sql = "CALL `Rollback`('$key')";  break;
     }
   }else{
     switch ($table) {

@@ -26,15 +26,14 @@ export class BalancesComponent implements OnInit {
 
   constructor(private _dbService: DbService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.loadedBalances = false;
     this.user1Filter = 0;
     this.user2Filter = 0;
     if (SharedService.users.length == 0) {
-      this.getData();
-    } {
-      this.getBalances();
+      await this.getData();
     }
+    await this.getBalances();
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,55 +66,52 @@ export class BalancesComponent implements OnInit {
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  getData() {
+  async getData() {
     SharedService.users = [];
-    this._dbService.getUsers()
-      .subscribe((res: any[]) => {
-        res.forEach(elem => {
-          let tmp = UserMapper.ConvertToDalFromJson(elem);
-          SharedService.users.push(UserMapper.ConvertToEntity(tmp))
-        });
-        console.log(SharedService.users)
-        SharedService.usersFilters = [];
-        SharedService.usersFilters.push("wszyscy");
-        SharedService.users.forEach(item => {
-          SharedService.usersFilters.push(item.Login)
-        });
-        this.loadedUsers = true;
-        this.getBalances();
-      })
+    let res = await this._dbService.getUsers();
+    res.forEach(elem => {
+      let tmp = UserMapper.ConvertToDalFromJson(elem);
+      SharedService.users.push(UserMapper.ConvertToEntity(tmp))
+    });
+    console.log(SharedService.users)
+    SharedService.usersFilters = [];
+    SharedService.usersFilters.push("wszyscy");
+    SharedService.users.forEach(item => {
+      SharedService.usersFilters.push(item.Login)
+    });
+    this.loadedUsers = true;
   }
 
-  getBalances() {
+  async getBalances() {
+    this.balances = [];
     this.filteredBalances = [];
-    this._dbService.getBalances()
-      .subscribe((res: any[]) => {
-        this.balances = [];
-        res.forEach(elem => {
-          let tmp = BalanceMapper.ConvertToDalFromJson(elem);
-          this.balances.push(BalanceMapper.ConvertToEntity(tmp, SharedService.users))
-        });
-        for (let i = 0; i < this.balances.length; ++i) {
-          this.value.push("0");
-        }
-        console.log(this.balances)
-        this.filteredBalances = this.balances;
-        this.loadedBalances = true;
-      })
+    let res = await this._dbService.getBalances();
+    res.forEach(elem => {
+      let tmp = BalanceMapper.ConvertToDalFromJson(elem);
+      this.balances.push(BalanceMapper.ConvertToEntity(tmp, SharedService.users))
+    });
+    for (let i = 0; i < this.balances.length; ++i) {
+      this.value.push("0");
+    }
+    console.log(this.balances)
+    this.filteredBalances = this.balances;
+
+    this.loadedBalances = true;
   }
 
-  addPayment(user1: User, user2: User, value: string) {
+  async addPayment(user1: User, user2: User, value: string) {
     let val = SharedService.str2Int(value);
     if (val > 0) {
-      this._dbService.getLastActionNumber().subscribe(res => {
-        //console.log(res[0]["MAX(Action)"]);
-        let action = Number(res[0]["MAX(Action)"]) + 1;
-        let tmp = new Payment(0, user1, user2, "ZWROT", val, PaymentType["return-cash"], action, "");
-        this._dbService.addPayment(PaymentMapper.ConvertToDal(tmp))
-          .subscribe(res => { this.getBalances(); }, err => { this.submitError = true; })
-      });
-      for(let i=0; i<this.value.length;++i){
-        this.value[i]="0";
+      let res = await this._dbService.getLastActionNumber();
+      //console.log(res[0]["MAX(Action)"]);
+      let action = Number(res[0]["MAX(Action)"]) + 1;
+      let tmp = new Payment(0, user1, user2, "ZWROT", val, PaymentType["return-cash"], action, "");
+
+      await this._dbService.addPayment(PaymentMapper.ConvertToDal(tmp));
+      this.getBalances();
+
+      for (let i = 0; i < this.value.length; ++i) {
+        this.value[i] = "0";
       }
     }
   };

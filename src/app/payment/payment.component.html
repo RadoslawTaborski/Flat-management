@@ -29,7 +29,7 @@
             <th>Przypisani</th>
             <th>Kwota</th>
             <th>Data</th>
-            <th>Anuluj</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -40,8 +40,8 @@
             <td>{{item.Value}}</td>
             <td>{{item.AddDate}}</td>
             <td>
-                <button *ngIf="checkDate(item)" (click)="rollback(item)" class="btn btn-outline-primary">
-                    <i class="fa fa-undo" aria-hidden="true"></i>
+                <button *ngIf="checkDate(item)" (click)="rollback(item)" class="btn btn-outline-danger">
+                    <i class="fa fa-times" aria-hidden="true"></i>
                 </button>
             </td>
         </tr>

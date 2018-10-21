@@ -29,15 +29,14 @@ export class ShoppingComponent implements OnInit {
 
   constructor(private _dbService: DbService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.loadedShopping = false;
     this.userID = 1;
     this.categoryID = 0;
     if (SharedService.users.length == 0) {
-      this.getData();
-    } else {
-      this.getShoppingItems();
+      await this.getData();
     }
+    await this.getShoppingItems();
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,12 +62,6 @@ export class ShoppingComponent implements OnInit {
     return new ShoppingItem(0, this.getUserByID(user), name, this.categories[category], 0, "", "");
   }
 
-  removeShoppingItem(item: ShoppingItem) {
-    //console.log(item)
-    this._dbService.removeShoppingItem(item.ID)
-      .subscribe(res => { this.getShoppingItems(); }, err => { this.submitError = true; })
-  }
-
   filtering(user: number, category: number) {
     if (user == 0 && category == 0) {
       this.filteredShoppingItems = this.shoppingItems;
@@ -83,45 +76,46 @@ export class ShoppingComponent implements OnInit {
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  getData() {
+  async getData() {
     SharedService.users = [];
-    this._dbService.getUsers()
-      .subscribe((res: any[]) => {
-        res.forEach(elem => {
-          let tmp = UserMapper.ConvertToDalFromJson(elem);
-          SharedService.users.push(UserMapper.ConvertToEntity(tmp))
-        });
-        console.log(SharedService.users)
-        SharedService.usersFilters = [];
-        SharedService.usersFilters.push("wszyscy");
-        SharedService.users.forEach(item => {
-          SharedService.usersFilters.push(item.Login)
-        });
-        this.loadedUsers = true;
-        this.getShoppingItems();
-      })
+    let res = await this._dbService.getUsers()
+    res.forEach(elem => {
+      let tmp = UserMapper.ConvertToDalFromJson(elem);
+      SharedService.users.push(UserMapper.ConvertToEntity(tmp))
+    });
+    console.log(SharedService.users)
+    SharedService.usersFilters = [];
+    SharedService.usersFilters.push("wszyscy");
+    SharedService.users.forEach(item => {
+      SharedService.usersFilters.push(item.Login)
+    });
+    this.loadedUsers = true;
   }
 
-  getShoppingItems() {
+  async getShoppingItems() {
     this.shoppingItems = [];
     this.filteredShoppingItems = [];
-    this._dbService.getShoppingItems()
-      .subscribe((res: any[]) => {
-        res.forEach(elem => {
-          let tmp = ShoppingItemMapper.ConvertToDalFromJson(elem);
-          this.shoppingItems.push(ShoppingItemMapper.ConvertToEntity(tmp, SharedService.users));
-        });
-        console.log(this.shoppingItems)
-        this.filteredShoppingItems = this.shoppingItems;
-        this.loadedShopping = true;
-      })
+    let res = await this._dbService.getShoppingItems()
+    res.forEach(elem => {
+      let tmp = ShoppingItemMapper.ConvertToDalFromJson(elem);
+      this.shoppingItems.push(ShoppingItemMapper.ConvertToEntity(tmp, SharedService.users));
+    });
+    console.log(this.shoppingItems)
+    this.filteredShoppingItems = this.shoppingItems;
+    this.loadedShopping = true;
   }
 
-  addShoppingItem(item: ShoppingItem) {
+  async addShoppingItem(item: ShoppingItem) {
     if (!SharedService.isNullOrWhiteSpace(item.Name) && item.User != null && item.Category != "") {
-      this._dbService.addShoppingItem(ShoppingItemMapper.ConvertToDal(item))
-        .subscribe(res => { this.getShoppingItems(); }, err => { this.submitError = true; })
+      await this._dbService.addShoppingItem(ShoppingItemMapper.ConvertToDal(item))
+      this.getShoppingItems();
       this.name = "";
     }
+  }
+
+  async removeShoppingItem(item: ShoppingItem) {
+    //console.log(item)
+    await this._dbService.removeShoppingItem(item.ID)
+    this.getShoppingItems();
   }
 }

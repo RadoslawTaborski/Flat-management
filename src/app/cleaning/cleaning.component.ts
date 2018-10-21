@@ -16,77 +16,71 @@ export class CleaningComponent implements OnInit {
   cleaning: Cleaning[] = []
   loadedCleaning: boolean = false;
   loadedUsers: boolean = false;
+  loadedCleaners: boolean = false;
   filteredCleaning: Cleaning[] = [];
   submitError: boolean;
 
   constructor(private _dbService: DbService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.loadedCleaning = false;
     if (this.cleaners.length == 0) {
-      this.getData();
-    } else {
-      this.getCleaners();
+      await this.getData();
     }
+    await this.getCleaners();
+    await this.getCleaning();
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  addCleaning(item: Cleaner) {
-    let tmp = new Cleaning(0, item, "");
-    this._dbService.addCleaning(CleaningMapper.ConvertToDal(tmp))
-      .subscribe(res => { this.getCleaners(); }, err => { this.submitError = true; })
-  }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  getData() {
+  async getData() {
     SharedService.users = [];
-    this._dbService.getUsers()
-      .subscribe((res: any[]) => {
-        res.forEach(elem => {
-          let tmp = UserMapper.ConvertToDalFromJson(elem);
-          SharedService.users.push(UserMapper.ConvertToEntity(tmp))
-        });
-        console.log(SharedService.users)
-        SharedService.usersFilters = [];
-        SharedService.usersFilters.push("wszyscy");
-        SharedService.users.forEach(item => {
-          SharedService.usersFilters.push(item.Login)
-        });
-        this.loadedUsers = true;
-        this.getCleaners();
-      })
+    let res = await this._dbService.getUsers();
+    res.forEach(elem => {
+      let tmp = UserMapper.ConvertToDalFromJson(elem);
+      SharedService.users.push(UserMapper.ConvertToEntity(tmp))
+    });
+    console.log(SharedService.users)
+    SharedService.usersFilters = [];
+    SharedService.usersFilters.push("wszyscy");
+    SharedService.users.forEach(item => {
+      SharedService.usersFilters.push(item.Login)
+    });
+    this.loadedUsers = true;
   }
 
-  getCleaners() {
+  async getCleaners() {
     this.cleaners = [];
-    this._dbService.getCleaners()
-      .subscribe((res: any[]) => {
-        res.forEach(elem => {
-          let tmp = CleanerMapper.ConvertToDalFromJson(elem);
-          this.cleaners.push(CleanerMapper.ConvertToEntity(tmp, SharedService.users));
-        });
-        console.log(this.cleaners)
-        this.getCleaning();
-        this.cleaners = this.cleaners.sort((a, b) => (a.Counter > b.Counter) ? 1 : ((b.Counter > a.Counter) ? -1 : (a.LastTimeOfCleaning > b.LastTimeOfCleaning) ? 1 : -1));
-        this.loadedCleaning = true;
-      })
+    let res = await this._dbService.getCleaners();
+    res.forEach(elem => {
+      let tmp = CleanerMapper.ConvertToDalFromJson(elem);
+      this.cleaners.push(CleanerMapper.ConvertToEntity(tmp, SharedService.users));
+    });
+    console.log(this.cleaners)
+    this.cleaners = this.cleaners.sort((a, b) => (a.Counter > b.Counter) ? 1 : ((b.Counter > a.Counter) ? -1 : (a.LastTimeOfCleaning > b.LastTimeOfCleaning) ? 1 : -1));
+    this.loadedCleaners = true;
   }
 
-  getCleaning() {
+  async getCleaning() {
     this.cleaning = [];
     this.filteredCleaning = [];
-    this._dbService.getCleaning()
-      .subscribe((res: any[]) => {
-        res.forEach(elem => {
-          let tmp = CleaningMapper.ConvertToDalFromJson(elem);
-          this.cleaning.push(CleaningMapper.ConvertToEntity(tmp, this.cleaners));
-        });
-        console.log(this.cleaning)
-        this.filteredCleaning = this.cleaning;
-        this.loadedCleaning = true;
-      })
+    let res = await this._dbService.getCleaning()
+    res.forEach(elem => {
+      let tmp = CleaningMapper.ConvertToDalFromJson(elem);
+      this.cleaning.push(CleaningMapper.ConvertToEntity(tmp, this.cleaners));
+    });
+    console.log(this.cleaning)
+    this.filteredCleaning = this.cleaning;
+    this.loadedCleaning = true;
+  }
+
+  async addCleaning(item: Cleaner) {
+    let tmp = new Cleaning(0, item, "");
+    await this._dbService.addCleaning(CleaningMapper.ConvertToDal(tmp));
+    this.getCleaners();
   }
 
 }
