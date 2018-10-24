@@ -36,6 +36,10 @@ export class PaymentComponent implements OnInit {
   deviceInfo= null;
   isMobile = false;
   isDesktop = false;
+  isTablet = false;
+  filteredPaymentsGr: PaymentGroup[] = [];
+  user1Filter: number = 0;
+  user2Filter: number = 0;
 
   constructor(private _dbService: DbService, private deviceService: DeviceDetectorService) {}
 
@@ -43,8 +47,8 @@ export class PaymentComponent implements OnInit {
     this.deviceInfo = this.deviceService.getDeviceInfo();
     this.isMobile=this.deviceService.isMobile();
     this.isDesktop=this.deviceService.isDesktop();
+    this.isTablet=this.deviceService.isTablet();
   }
-
   async ngOnInit() {
     this.detectDevice();
     this.loadedPayments = false;
@@ -79,13 +83,13 @@ export class PaymentComponent implements OnInit {
     if (index !== -1) {
       this.selected[index]["1"] = !this.selected[index]["1"];
     }
-    console.log(this.selected)
+    //console.log(this.selected)
   }
 
   findSelected(user: User): number {
-    console.log(user)
+    //console.log(user)
     let tmp = this.selected.filter(x => x["0"] == user)[0];
-    console.log(tmp);
+    //console.log(tmp);
     return this.selected.indexOf(tmp);
   }
 
@@ -124,6 +128,31 @@ export class PaymentComponent implements OnInit {
     })
   }
 
+  filtering(user1: number, user2: number) {
+    //console.log(user1, user2)
+    if (user1 == 0 && user2 == 0) {
+      this.filteredPaymentsGr = this.paymentsGroup;
+    } else if (user1 != 0 && user2 != 0) {
+      this.filteredPaymentsGr = this.paymentsGroup.filter(x => x.User1.Login == SharedService.usersFilters[user1] && this.isPaymentsConcernUser(SharedService.usersFilters[user2],x))
+    } else if (user1 != 0) {
+      this.filteredPaymentsGr = this.paymentsGroup.filter(x => x.User1.Login == SharedService.usersFilters[user1])
+    } else if (user2 != 0) {
+      this.filteredPaymentsGr = this.paymentsGroup.filter(x => this.isPaymentsConcernUser(SharedService.usersFilters[user2],x))
+      //console.log(this.filteredPaymentsGr)
+    }
+  }
+  
+  isPaymentsConcernUser(login: string, group: PaymentGroup): boolean{
+    let result = false;
+    group.Payments.forEach(element =>{
+      if(element.User2.Login == login){
+        //console.log(login)
+        result=true;
+      }
+    })
+    //console.log(result)
+    return result;
+  }
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   async groupPayments(payments: Payment[]) {
     this.det=[];
@@ -137,7 +166,8 @@ export class PaymentComponent implements OnInit {
         this.det.push(false);
       }
     }
-    console.log(this.paymentsGroup);
+    this.filteredPaymentsGr=this.paymentsGroup;
+    //console.log(this.filteredPaymentsGr);
   }
 
   async getData() {
@@ -148,7 +178,7 @@ export class PaymentComponent implements OnInit {
       let tmp = UserMapper.ConvertToDalFromJson(elem);
       SharedService.users.push(UserMapper.ConvertToEntity(tmp))
     });
-    console.log(SharedService.users)
+    //console.log(SharedService.users)
     SharedService.usersFilters = [];
     SharedService.usersFilters.push("wszyscy");
     SharedService.users.forEach(item => {
@@ -165,7 +195,7 @@ export class PaymentComponent implements OnInit {
       let tmp = PaymentMapper.ConvertToDalFromJson(elem);
       this.payments.push(PaymentMapper.ConvertToEntity(tmp, SharedService.users))
     });
-    console.log(this.payments)
+    //console.log(this.payments)
     this.filteredPayments = this.payments;
 
     this.groupPayments(this.filteredPayments);
@@ -178,7 +208,7 @@ export class PaymentComponent implements OnInit {
   };
 
   async rollback(item: PaymentGroup) {
-    console.log(item, item.Action)
+    //console.log(item, item.Action)
     item.Payments.forEach(async element => {
       await this._dbService.rollback(element.ID);
     });
@@ -186,7 +216,7 @@ export class PaymentComponent implements OnInit {
   };
 
   async addPayments(name: string, userID: number, value: string) {
-    console.log(value)
+    //console.log(value)
     let amount = SharedService.str2Int(value);
     let count = this.countSelectedUsers();
     if (count > 0 && amount > 0 && !SharedService.isNullOrWhiteSpace(name)) {

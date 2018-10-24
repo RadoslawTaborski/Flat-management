@@ -26,6 +26,7 @@ export class CleaningComponent implements OnInit {
   deviceInfo= null;
   isMobile = false;
   isDesktop = false;
+  isTablet = false;
 
   constructor(private _dbService: DbService, private deviceService: DeviceDetectorService) {}
 
@@ -33,6 +34,7 @@ export class CleaningComponent implements OnInit {
     this.deviceInfo = this.deviceService.getDeviceInfo();
     this.isMobile=this.deviceService.isMobile();
     this.isDesktop=this.deviceService.isDesktop();
+    this.isTablet=this.deviceService.isTablet();
   }
 
   async ngOnInit() {
@@ -80,7 +82,7 @@ export class CleaningComponent implements OnInit {
       let tmp = UserMapper.ConvertToDalFromJson(elem);
       SharedService.users.push(UserMapper.ConvertToEntity(tmp))
     });
-    console.log(SharedService.users)
+    //console.log(SharedService.users)
     SharedService.usersFilters = [];
     SharedService.usersFilters.push("wszyscy");
     SharedService.users.forEach(item => {
@@ -96,7 +98,7 @@ export class CleaningComponent implements OnInit {
       let tmp = CleanerMapper.ConvertToDalFromJson(elem);
       this.cleaners.push(CleanerMapper.ConvertToEntity(tmp, SharedService.users));
     });
-    console.log(this.cleaners)
+    //console.log(this.cleaners)
     this.cleaners = this.cleaners.sort((a, b) => (a.Counter > b.Counter) ? 1 : ((b.Counter > a.Counter) ? -1 : (a.LastTimeOfCleaning > b.LastTimeOfCleaning) ? 1 : -1));
     this.loadedCleaners = true;
   }
@@ -109,7 +111,7 @@ export class CleaningComponent implements OnInit {
       let tmp = CleaningMapper.ConvertToDalFromJson(elem);
       this.cleaning.push(CleaningMapper.ConvertToEntity(tmp, this.cleaners));
     });
-    console.log(this.cleaning)
+    //console.log(this.cleaning)
     this.filteredCleaning = this.cleaning;
     this.loadedCleaning = true;
   }
@@ -130,6 +132,6 @@ export class CleaningComponent implements OnInit {
     }
 
     this.date = newDate.toLocaleDateString();
-    console.log(this.delay);
+    //console.log(this.delay);
   }
 }

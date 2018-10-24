@@ -29,6 +29,7 @@ export class BalancesComponent implements OnInit {
   deviceInfo= null;
   isMobile = false;
   isDesktop = false;
+  isTablet = false;
 
   constructor(private _dbService: DbService, private deviceService: DeviceDetectorService) {}
 
@@ -36,6 +37,7 @@ export class BalancesComponent implements OnInit {
     this.deviceInfo = this.deviceService.getDeviceInfo();
     this.isMobile=this.deviceService.isMobile();
     this.isDesktop=this.deviceService.isDesktop();
+    this.isTablet=this.deviceService.isTablet();
   }
 
   async ngOnInit() {
@@ -66,7 +68,7 @@ export class BalancesComponent implements OnInit {
   }
 
   filtering(user1: number, user2: number) {
-    console.log(user1, user2)
+    //console.log(user1, user2)
     if (user1 == 0 && user2 == 0) {
       this.filteredBalances = this.balances;
     } else if (user1 != 0 && user2 != 0) {
@@ -91,7 +93,7 @@ export class BalancesComponent implements OnInit {
       let tmp = UserMapper.ConvertToDalFromJson(elem);
       SharedService.users.push(UserMapper.ConvertToEntity(tmp))
     });
-    console.log(SharedService.users)
+    //(SharedService.users)
     SharedService.usersFilters = [];
     SharedService.usersFilters.push("wszyscy");
     SharedService.users.forEach(item => {
@@ -112,7 +114,7 @@ export class BalancesComponent implements OnInit {
       this.value.push("");
       this.ret.push(false);
     }
-    console.log(this.balances)
+    //console.log(this.balances)
     this.filteredBalances = this.balances;
     this.loadedBalances = true;
   }

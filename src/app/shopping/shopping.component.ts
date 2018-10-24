@@ -19,6 +19,7 @@ export class ShoppingComponent implements OnInit {
   name: string;
   userFilter: number = 0;
   categoryFilter: number = 0;
+  add=false;
 
   shoppingItems: ShoppingItem[] = [];
   filteredShoppingItems: ShoppingItem[] = [];
@@ -31,6 +32,7 @@ export class ShoppingComponent implements OnInit {
   deviceInfo= null;
   isMobile = false;
   isDesktop = false;
+  isTablet = false;
 
   constructor(private _dbService: DbService, private deviceService: DeviceDetectorService) {}
 
@@ -38,8 +40,8 @@ export class ShoppingComponent implements OnInit {
     this.deviceInfo = this.deviceService.getDeviceInfo();
     this.isMobile=this.deviceService.isMobile();
     this.isDesktop=this.deviceService.isDesktop();
+    this.isTablet=this.deviceService.isTablet();
   }
-  
   async ngOnInit() {
     this.detectDevice();
     this.loadedShopping = false;
@@ -86,6 +88,10 @@ export class ShoppingComponent implements OnInit {
     }
   }
 
+  setAdd(){
+    this.add=!this.add;
+  }
+
   /////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async getData() {
@@ -95,7 +101,7 @@ export class ShoppingComponent implements OnInit {
       let tmp = UserMapper.ConvertToDalFromJson(elem);
       SharedService.users.push(UserMapper.ConvertToEntity(tmp))
     });
-    console.log(SharedService.users)
+    //console.log(SharedService.users)
     SharedService.usersFilters = [];
     SharedService.usersFilters.push("wszyscy");
     SharedService.users.forEach(item => {
@@ -112,7 +118,7 @@ export class ShoppingComponent implements OnInit {
       let tmp = ShoppingItemMapper.ConvertToDalFromJson(elem);
       this.shoppingItems.push(ShoppingItemMapper.ConvertToEntity(tmp, SharedService.users));
     });
-    console.log(this.shoppingItems)
+    //console.log(this.shoppingItems)
     this.filteredShoppingItems = this.shoppingItems;
     this.loadedShopping = true;
   }

@@ -1,20 +1,31 @@
-<ng-container *ngIf="isDesktop">
+<div *ngIf="!loadedPayments" style="text-align: center">
+    <h1><i class="fa fa-spinner fa-spin"></i></h1>
+</div>
+
+<ng-container *ngIf="isDesktop  || isTablet">
     <br/>
     <ng-container *ngIf="loadedPayments==1">
-        <button [style.width.%]="20" *ngIf="!add" (click)="setAdd()" class="btn btn-outline-primary center">
-            <i class="fa fa-arrow-down" aria-hidden="true"></i>
+        <select [style.width.%]="45" [(ngModel)]="user1Filter" class="custom-select">
+            <option *ngFor="let user of getUsersFilterItems()" [value]="getUsersFilterItems().indexOf(user)">{{user}}</option>
+        </select>
+        <select [style.width.%]="45" [(ngModel)]="user2Filter" class="custom-select">
+            <option *ngFor="let user of getUsersFilterItems()" [value]="getUsersFilterItems().indexOf(user)">{{user}}</option>
+        </select>
+        <button [style.width.%]="10" (click)="filtering(user1Filter,user2Filter)" class="btn btn-outline-info">
+            <i class="fa fa-search" aria-hidden="true"></i>
         </button>
-        <ng-container *ngIf="add">
-            <button [style.width.%]="20" (click)="setAdd()" class="btn btn-outline-primary">
-                <i class="fa fa-arrow-up" aria-hidden="true"></i>
-            </button>
-            <br/>
-            <br/>
-            <label [style.width.%]="10">Dotyczy: </label>
-            <div class="form-check form-check-inline" *ngFor="let user of getUsersItems()">
-                <label [style.width.%]="100" class="btn">
-                    <input type="checkbox" (change)=selectUser(user) [checked]='selected[findSelected(user)]["1"]'>{{user.Login}}
-                </label>
+    </ng-container>
+    <br/>
+    <br/>
+    <ng-container *ngIf="loadedPayments==1">
+        <ng-container>
+            <div>
+                <label [style.width.%]="10">Dotyczy: </label>
+                <div class="form-check form-check-inline" *ngFor="let user of getUsersItems()">
+                    <label [style.width.%]="100" class="btn">
+                        <input type="checkbox" (change)=selectUser(user) [checked]='selected[findSelected(user)]["1"]'>{{user.Login}}
+                    </label>
+                </div>
             </div>
             <div>
                 <label [style.width.%]="40"><input class="form-control" placeholder="nazwa" [(ngModel)]="name" style="padding-top: 0.01em"></label>
@@ -39,16 +50,22 @@
             <label [style.width.%]="20" style="font-weight:bold">Data</label>
             <hr/>
         </ng-container>
-        <ng-container *ngFor="let item of paymentsGroup; let i = index">
+        <ng-container *ngFor="let item of filteredPaymentsGr; let i = index">
             <ng-container>
-                <label [style.width.%]="20">{{item.Name}}</label>
-                <label [style.width.%]="20">{{item.User1.Login}}</label>
-                <label [style.width.%]="15">{{item.getInitials()}}</label>
-                <label [style.width.%]="15">{{item.Value}}</label>
-                <label [style.width.%]="20">{{item.AddDate.substring(0,10)}}</label>
-                <button [style.width.%]="10" *ngIf="checkDate(item)" (click)="rollback(item)" class="btn btn-outline-danger">
-                    <i class="fa fa-times" aria-hidden="true"></i>
-                </button>
+                <div [style.width.%]="100">
+                    <div [style.width.%]="100" class="form-check form-check-inline">
+                        <div [style.width.%]="20"><label [style.width.%]="100" style="vertical-align: middle;">{{item.Name}}</label></div>
+                        <div [style.width.%]="20"><label [style.width.%]="100" style="vertical-align: middle;">{{item.User1.Login}}</label></div>
+                        <div [style.width.%]="15"><label [style.width.%]="100" style="vertical-align: middle;">{{item.getInitials()}}</label></div>
+                        <div [style.width.%]="15"><label [style.width.%]="100" style="vertical-align: middle;">{{item.Value}}</label></div>
+                        <div [style.width.%]="20"><label [style.width.%]="100" style="vertical-align: middle;">{{item.AddDate.substring(0,10)}}</label></div>
+                        <div [style.width.%]="10" *ngIf="checkDate(item)">
+                            <button [style.width.%]="100" (click)="rollback(item)" class="btn btn-outline-danger">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <hr/>
             </ng-container>
         </ng-container>
@@ -57,6 +74,19 @@
 
 
 <ng-container *ngIf="isMobile">
+    <br/>
+    <ng-container *ngIf="loadedPayments==1">
+        <select [style.width.%]="40" [(ngModel)]="user1Filter" class="custom-select">
+            <option *ngFor="let user of getUsersFilterItems()" [value]="getUsersFilterItems().indexOf(user)">{{user}}</option>
+        </select>
+        <select [style.width.%]="40" [(ngModel)]="user2Filter" class="custom-select">
+            <option *ngFor="let user of getUsersFilterItems()" [value]="getUsersFilterItems().indexOf(user)">{{user}}</option>
+        </select>
+        <button [style.width.%]="20" (click)="filtering(user1Filter,user2Filter)" class="btn btn-outline-info">
+            <i class="fa fa-search" aria-hidden="true"></i>
+        </button>
+    </ng-container>
+    <br/>
     <br/>
     <ng-container *ngIf="loadedPayments==1">
         <button [style.width.%]="100" *ngIf="!add" (click)="setAdd()" class="btn btn-outline-primary">
@@ -69,19 +99,31 @@
             <br/>
             <br/>
             <label [style.width.%]="100">Dotyczy: </label>
-            <div class="form-check form-check-inline" *ngFor="let user of getUsersItems()">
-                <label [style.width.%]="100" class="btn">
-                    <input class="btn" type="checkbox" (change)=selectUser(user) [checked]='selected[findSelected(user)]["1"]'>{{user.Login}}
-                </label>
+            <div>
+                <div class="form-check form-check-inline" *ngFor="let user of getUsersItems()">
+                    <label [style.width.%]="100" class="btn">
+                        <input class="btn" type="checkbox" (change)=selectUser(user) [checked]='selected[findSelected(user)]["1"]'>{{user.Login}}
+                    </label>
+                </div>
             </div>
-            <label [style.width.%]="50"><input class="form-control" placeholder="nazwa" [(ngModel)]="name" style="padding-top: 0.01em"></label>
-            <select [style.width.%]="30" [(ngModel)]="userID" class="custom-select">
-                <option *ngFor="let user of getUsersItems()" [value]="user.ID">{{user.Login}}</option>
-            </select>
-            <label [style.width.%]="20"><input class="form-control" placeholder="kwota" [(ngModel)]="value" style="padding-top: 0.01em"></label>
-            <button [style.width.%]="100" (click)="addPayments(name,userID,value)" class="btn btn-outline-success">
-                <i class="fa fa-check" aria-hidden="true"></i>
-            </button>
+            <div [style.width.%]="100">
+                <div [style.width.%]="100" class="form-check form-check-inline">
+                    <div [style.width.%]="45"><label [style.width.%]="100" style="vertical-align: middle;"><input class="form-control" placeholder="nazwa"
+                                [(ngModel)]="name"></label></div>
+                    <div [style.width.%]="30">
+                        <select [style.width.%]="100" style="vertical-align: middle;" [(ngModel)]="userID" class="custom-select">
+                            <option *ngFor="let user of getUsersItems()" [value]="user.ID">{{user.Login}}</option>
+                        </select>
+                    </div>
+                    <div [style.width.%]="25"><label [style.width.%]="100" style="vertical-align: middle;"><input class="form-control" placeholder="kwota"
+                                [(ngModel)]="value"></label></div>
+                </div>
+            </div>
+            <div [style.width.%]="100">
+                <button [style.width.%]="100" style="vertical-align: middle;" (click)="addPayments(name,userID,value)" class="btn btn-outline-success">
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                </button>
+            </div>
         </ng-container>
     </ng-container>
     <hr/>
@@ -94,18 +136,25 @@
             <label [style.width.%]="20" style="font-weight:bold">Akcja</label>
             <hr/>
         </ng-container>
-        <ng-container *ngFor="let item of paymentsGroup; let i = index">
+        <ng-container *ngFor="let item of filteredPaymentsGr; let i = index">
             <ng-container>
-                <label [style.width.%]="30">{{item.Name}}</label>
-                <label [style.width.%]="30">{{item.getInitials()}}</label>
-                <label [style.width.%]="20">{{item.Value}}</label>
-                <button [style.width.%]="20" *ngIf="!det[i]" (click)="getDetails(i)" class="btn btn-outline-primary">
-                    <i class="fa fa-arrow-down" aria-hidden="true"></i>
-                </button>
-                <button [style.width.%]="20" *ngIf="det[i]" (click)="getDetails(i)" class="btn btn-outline-primary">
-                    <i class="fa fa-arrow-up" aria-hidden="true"></i>
-                </button>
-
+                <div [style.width.%]="100">
+                    <div [style.width.%]="100" class="form-check form-check-inline">
+                        <div [style.width.%]="30"><label [style.width.%]="100" style="vertical-align: middle;">{{item.Name}}</label></div>
+                        <div [style.width.%]="30"><label [style.width.%]="100" style="vertical-align: middle;">{{item.getInitials()}}</label></div>
+                        <div [style.width.%]="20"><label [style.width.%]="100" style="vertical-align: middle;">{{item.Value}}</label></div>
+                        <div [style.width.%]="20" *ngIf="!det[i]">
+                            <button [style.width.%]="100" style="vertical-align: middle;" (click)="getDetails(i)" class="btn btn-outline-primary">
+                                <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div [style.width.%]="20" *ngIf="det[i]">
+                            <button [style.width.%]="100" style="vertical-align: middle;" (click)="getDetails(i)" class="btn btn-outline-primary">
+                                <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <div *ngIf="det[i]" style="overflow: auto;">
                     <button [style.width.%]="20" *ngIf="checkDate(item)" (click)="rollback(item)" class="btn btn-outline-danger float-right">
                         <i class="fa fa-times" aria-hidden="true"></i>
