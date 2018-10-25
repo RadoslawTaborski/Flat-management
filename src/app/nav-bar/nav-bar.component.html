@@ -1,26 +1,46 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary navbar-fixed-top">
-    <div class="container">
+  <div class="container">
     <a class="navbar-brand" href="">{{appName}}</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01"
       aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-  
-    <div class="collapse navbar-collapse" id="navbarColor01">
-      <ul class="navbar-nav mr-auto">
-        <li data-toggle="collapse" data-target=".navbar-collapse" class="nav-item">
-          <a class="nav-link" routerLink="/shopping/">Lista zakupów</a>
-        </li>
-        <li data-toggle="collapse" data-target=".navbar-collapse" class="nav-item">
-          <a class="nav-link" routerLink="/payment/">Wydatki</a>
-        </li>
-        <li data-toggle="collapse" data-target=".navbar-collapse" class="nav-item">
+
+    <ng-container *ngIf="isDesktop || isTablet">
+      <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/shopping/">Lista zakupów</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/payment/">Wydatki</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/balances/">Saldo</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/cleaning/">Sprzątanie</a>
+          </li>
+        </ul>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="isMobile">
+      <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+          <li data-toggle="collapse" data-target=".navbar-collapse" class="nav-item">
+            <a class="nav-link" routerLink="/shopping/">Lista zakupów</a>
+          </li>
+          <li data-toggle="collapse" data-target=".navbar-collapse" class="nav-item">
+            <a class="nav-link" routerLink="/payment/">Wydatki</a>
+          </li>
+          <li data-toggle="collapse" data-target=".navbar-collapse" class="nav-item">
             <a class="nav-link" routerLink="/balances/">Saldo</a>
           </li>
           <li data-toggle="collapse" data-target=".navbar-collapse" class="nav-item">
-              <a class="nav-link" routerLink="/cleaning/">Sprzątanie</a>
-            </li>
-      </ul>
-    </div>
+            <a class="nav-link" routerLink="/cleaning/">Sprzątanie</a>
+          </li>
+        </ul>
+      </div>
+    </ng-container>
   </div>
-  </nav>
+</nav>

@@ -49,6 +49,7 @@ export class PaymentComponent implements OnInit {
     this.isDesktop=this.deviceService.isDesktop();
     this.isTablet=this.deviceService.isTablet();
   }
+  
   async ngOnInit() {
     this.detectDevice();
     this.loadedPayments = false;
