@@ -120,6 +120,7 @@ export class CleaningComponent implements OnInit {
     let tmp = new Cleaning(0, item, "");
     await this._dbService.addCleaning(CleaningMapper.ConvertToDal(tmp));
     this.getCleaners();
+    this.getCleaning();
   }
 
   async setDateOfNextCleaning(){
