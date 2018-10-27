@@ -12,7 +12,7 @@ export class NavBarComponent implements OnInit {
   isTablet: boolean;
   isMobile: boolean;;
 
-  appName = "Beeeema"
+  appName = "Gajowa"
   
   constructor(private deviceService: DeviceDetectorService) {}
 

@@ -108,14 +108,14 @@
             </div>
             <div [style.width.%]="100">
                 <div [style.width.%]="100" class="form-check form-check-inline">
-                    <div [style.width.%]="45"><label [style.width.%]="100" style="vertical-align: middle;"><input class="form-control" placeholder="nazwa"
+                    <div [style.width.%]="45" style="padding-top: 0.5em;"><label [style.width.%]="100" style="vertical-align: middle;"><input class="form-control" placeholder="nazwa"
                                 [(ngModel)]="name"></label></div>
                     <div [style.width.%]="30">
                         <select [style.width.%]="100" style="vertical-align: middle;" [(ngModel)]="userID" class="custom-select">
                             <option *ngFor="let user of getUsersItems()" [value]="user.ID">{{user.Login}}</option>
                         </select>
                     </div>
-                    <div [style.width.%]="25"><label [style.width.%]="100" style="vertical-align: middle;"><input class="form-control" placeholder="kwota"
+                    <div [style.width.%]="25" style="padding-top: 0.5em;"><label [style.width.%]="100" style="vertical-align: middle;"><input class="form-control" placeholder="kwota"
                                 [(ngModel)]="value"></label></div>
                 </div>
             </div>

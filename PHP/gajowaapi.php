@@ -4,10 +4,10 @@ header("Content-Type: application/json");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 header("Access-Control-Allow-Methods: GET, OPTIONS, DELETE");
 
-require_once("./BemaApi/get.php");
-require_once("./BemaApi/delete.php");
-require_once("./BemaApi/put.php");
-require_once("./BemaApi/post.php");
+require_once("./GajowaApi/get.php");
+require_once("./GajowaApi/delete.php");
+require_once("./GajowaApi/put.php");
+require_once("./GajowaApi/post.php");
 
 // get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];
@@ -26,12 +26,12 @@ $key = clear(array_shift($request)+0);
 
 if($table == ""){
   header("Content-Type: text/html; charset=utf-8");
-  readfile('./BemaApi/api.html' );
+  readfile('./GajowaApi/api.html' );
   die();
 }
 
 // connect to the mysql database
-$link = mysqli_connect($masterAdress, 'rado', 'Ameba123', 'Bema')
+$link = mysqli_connect($masterAdress, 'rado', 'Ameba123', 'Gajowa')
 or die('Error connectiong to MySQL server');
 
 mysqli_set_charset($link,'utf8');
