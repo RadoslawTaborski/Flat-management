@@ -16,7 +16,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class DbService {
-  private apiUrl: string = 'http://bema5.zapto.org:81/gajowa.php/';
+  private apiUrl: string = 'http://bema5.zapto.org:81/gajowaapi.php/';
 
   private _shoppingItems: string = 'items';
   private _users: string = 'users';

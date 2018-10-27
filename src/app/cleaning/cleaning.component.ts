@@ -124,14 +124,17 @@ export class CleaningComponent implements OnInit {
 
   async setDateOfNextCleaning(){
     let res = await this._dbService.getLastCleaningDate();
+    if(res[0]==undefined){
+      this.date=new Date().toLocaleDateString();
+    }else{
     let date=res[0].Date;
     let newDate = new Date(new Date(date).getTime() + (1000 * 60 * 60 * 24*7));
     let currentDate = new Date();
     if(currentDate>newDate){
       this.delay=  Math.floor(Math.abs(currentDate.getTime()-newDate.getTime()) / (1000 * 3600 * 24));
     }
-
     this.date = newDate.toLocaleDateString();
     //console.log(this.delay);
+    }
   }
 }
