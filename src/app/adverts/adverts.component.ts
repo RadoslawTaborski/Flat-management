@@ -103,14 +103,14 @@ export class AdvertsComponent implements OnInit {
       this.tab[j]=false;
     }
     this.tab[i]=true;
-    console.log(this.tab)
+    //console.log(this.tab)
   }
 
   shortenDate(date: string): string{
     let result = date;
     result=result.substring(0,result.length-3);
     result=result.replace(" 00:00","");
-    console.log(result);
+    //console.log(result);
     return result;
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -139,14 +139,14 @@ export class AdvertsComponent implements OnInit {
       let tmp = AdvertMapper.ConvertToDalFromJson(elem);
       this.adverts.push(AdvertMapper.ConvertToEntity(tmp, SharedService.users));
     });
-    console.log(this.adverts)
+    //console.log(this.adverts)
     this.filteredAdverts = this.adverts;
     this.sortAdvents();
     this.loadedAdverts = true;
   }
 
   async addAdvert(item: Advert) {
-    console.log(item);
+    //console.log(item);
     if (!SharedService.isNullOrWhiteSpace(item.Text) && item.User != null) {
       await this._dbService.addAdvert(AdvertMapper.ConvertToDal(item))
       await this.getAdverts();

@@ -116,7 +116,7 @@ export class CleaningComponent implements OnInit {
     let newDate = new Date(tmp.join("-"))
     var datePipe = new DatePipe("en-US");
     result = datePipe.transform(newDate, 'yyyy-MM-dd');
-    console.log(result)
+    //console.log(result)
     return result;
   }
   /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -183,7 +183,7 @@ export class CleaningComponent implements OnInit {
       for (let i = 11; i > 0; i--) {
         newDate = new Date(new Date(date).getTime() + (1000 * 60 * 60 * 24 * i));
         if (newDate.getDay() == 6) {
-          console.log(newDate, newDate.getDay());
+          //console.log(newDate, newDate.getDay());
           break;
         }
       }

@@ -23,7 +23,7 @@ SET time_zone = "+00:00";
 --
 DROP DATABASE IF EXISTS `gajowa`;
 CREATE DATABASE IF NOT EXISTS `gajowa` DEFAULT CHARACTER SET utf8 COLLATE utf8_polish_ci;
-USE `bema`;
+USE `gajowa`;
 
 DELIMITER $$
 --
