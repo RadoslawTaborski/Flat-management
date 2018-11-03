@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ParametersService {
-  static AppName="Bema"
+  static AppName="Beeeema"
   static ApiUrl="http://localhost/bemaapi.php/";
   static FooterText="© Bema - Radosław Taborski - 2018"
 
