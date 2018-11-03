@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DeviceDetectorService, DeviceInfo } from 'ngx-device-detector';
+import { ParametersService } from '../parameters.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -12,7 +13,7 @@ export class NavBarComponent implements OnInit {
   isTablet: boolean;
   isMobile: boolean;;
 
-  appName = "Gajowa"
+  appName = ParametersService.AppName;
   
   constructor(private deviceService: DeviceDetectorService) {}
 
@@ -26,5 +27,4 @@ export class NavBarComponent implements OnInit {
     this.isDesktop=this.deviceService.isDesktop();
     this.isTablet=this.deviceService.isTablet();
   }
-
 }

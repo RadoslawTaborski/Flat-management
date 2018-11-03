@@ -14,6 +14,7 @@ import { ContactComponent } from './contact/contact.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { CleaningComponent } from './cleaning/cleaning.component';
+import { AdvertsComponent } from './adverts/adverts.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { CleaningComponent } from './cleaning/cleaning.component';
     BalancesComponent,
     ContactComponent,
     CleaningComponent,
+    AdvertsComponent,
   ],
   imports: [
     HttpClientModule,

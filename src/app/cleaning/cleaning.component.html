@@ -8,7 +8,7 @@
         <ng-container>
             <h2 *ngIf="delay>0" class="text-danger" [style.width.%]="100" style="font-weight:bold">Opóźnienie!!! - dni: {{delay}}
             </h2>
-            <h3 class="text-danger" [style.width.%]="100" style="font-weight:bold">Następne sprzątanie: {{date}} - {{getNextCleanersString()}}</h3>
+            <h3 class="text-danger" [style.width.%]="100" style="font-weight:bold">Następne sprzątanie: {{date2}} - {{getNextCleanersString()}}</h3>
             <br/>
         </ng-container>
         <ng-container>
@@ -21,10 +21,20 @@
         <ng-container *ngFor="let item of cleaners; let i = index">
             <label [style.width.%]="30">{{item.User.Login}}</label>
             <label [style.width.%]="25">{{item.Counter}}</label>
-            <label [style.width.%]="35">{{item.LastTimeOfCleaning}}</label>
-            <button [style.width.%]="10" (click)="addCleaning(item)" class="btn btn-outline-success">
-                <i class="fa fa-check" aria-hidden="true"></i>
+            <label [style.width.%]="35">{{changeDateFormatToPL(item.LastTimeOfCleaning) + " ("+getDayOfWeek(item.LastTimeOfCleaning)+")"}}</label>
+            <button *ngIf="!user[i]" [style.width.%]="10" (click)="getDetails(i)" class="btn btn-outline-info">
+                <i class="fa fa-arrow-down" aria-hidden="true"></i>
             </button>
+            <button *ngIf="user[i]" [style.width.%]="10" (click)="getDetails(i)" class="btn btn-outline-info">
+                <i class="fa fa-arrow-up" aria-hidden="true"></i>
+            </button>
+            <div *ngIf="user[i]" style="overflow: auto;">
+                <button [style.width.%]="10" (click)="addCleaning(item,changeDateFormatToSQL(date))" class="btn btn-outline-success float-right">
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                </button>
+                <label class="float-right" [style.width.%]="36"><input class="form-control" placeholder="data" [(ngModel)]="date" ></label>
+                <label class="float-right">Data:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            </div>
             <hr/>
         </ng-container>
         <br/><br/>
@@ -35,7 +45,7 @@
         </ng-container>
         <ng-container *ngFor="let item of filteredCleaning; let i = index">
             <label [style.width.%]="50">{{item.Cleaner.User.Login}}</label>
-            <label [style.width.%]="50">{{item.Date}}</label>
+            <label [style.width.%]="50">{{changeDateFormatToPL(item.Date) + " ("+getDayOfWeek(item.Date)+")"}}</label>
             <hr/>
         </ng-container>
     </ng-container>
@@ -49,7 +59,7 @@
         <ng-container>
             <h2 *ngIf="delay>0" class="text-danger" [style.width.%]="100" style="font-weight:bold">Opóźnienie!!! - dni: {{delay}}
             </h2>
-            <h3 class="text-danger" [style.width.%]="100" style="font-weight:bold">Następne sprzątanie: {{date}} - {{getNextCleanersString()}}</h3>
+            <h3 class="text-danger" [style.width.%]="100" style="font-weight:bold">Następne sprzątanie: {{date2}} - {{getNextCleanersString()}}</h3>
             <br/>
         </ng-container>
         <ng-container>
@@ -62,10 +72,20 @@
         <ng-container *ngFor="let item of cleaners; let i = index">
             <label [style.width.%]="30">{{item.User.Login}}</label>
             <label [style.width.%]="20">{{item.Counter}}</label>
-            <label [style.width.%]="30">{{item.LastTimeOfCleaning}}</label>
-            <button [style.width.%]="20" (click)="addCleaning(item)" class="btn btn-outline-success">
-                <i class="fa fa-check" aria-hidden="true"></i>
+            <label [style.width.%]="30">{{changeDateFormatToPL(item.LastTimeOfCleaning)}}</label>
+            <button *ngIf="!user[i]" [style.width.%]="20" (click)="getDetails(i)" class="btn btn-outline-info">
+                <i class="fa fa-arrow-down" aria-hidden="true"></i>
             </button>
+            <button *ngIf="user[i]" [style.width.%]="20" (click)="getDetails(i)" class="btn btn-outline-info">
+                <i class="fa fa-arrow-up" aria-hidden="true"></i>
+            </button>
+            <div *ngIf="user[i]" style="overflow: auto;">
+                <button [style.width.%]="20" (click)="addCleaning(item,changeDateFormatToSQL(date))" class="btn btn-outline-success float-right">
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                </button>
+                <label class="float-right" [style.width.%]="33"><input class="form-control" placeholder="data" [(ngModel)]="date" ></label>
+                <label class="float-right">Data:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            </div>
             <hr/>
         </ng-container>
         <br/>
@@ -76,7 +96,7 @@
         </ng-container>
         <ng-container *ngFor="let item of filteredCleaning; let i = index">
             <label [style.width.%]="50">{{item.Cleaner.User.Login}}</label>
-            <label [style.width.%]="50">{{item.Date}}</label>
+            <label [style.width.%]="50">{{changeDateFormatToPL(item.Date)}}</label>
             <hr/>
         </ng-container>
     </ng-container>

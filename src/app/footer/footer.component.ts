@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ParametersService } from '../parameters.service';
 
 @Component({
   selector: 'app-footer',
@@ -12,4 +13,7 @@ export class FooterComponent implements OnInit {
   ngOnInit() {
   }
 
+  getText():string{
+    return ParametersService.FooterText;
+  }
 }

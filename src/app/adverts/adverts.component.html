@@ -1,0 +1,212 @@
+<div *ngIf="!loadedAdverts" style="text-align: center">
+    <h1><i class="fa fa-spinner fa-spin"></i></h1>
+</div>
+
+<ng-container *ngIf="isDesktop || isTablet">
+    <br/>
+    <ng-container *ngIf="loadedAdverts==1">
+        <label [style.width.%]="55"><input class="form-control" placeholder="tekst" [(ngModel)]="text" style="padding-top: 0.1em"></label>
+        <select [style.width.%]="15" [(ngModel)]="userID" class="custom-select">
+            <option *ngFor="let user of getUsersItems()" [value]="user.ID">{{user.Login}}</option>
+        </select>
+        <label [style.width.%]="20"><input class="form-control" placeholder="yyyy-MM-dd [HH:mm]" [(ngModel)]="endDate" style="padding-top: 0.1em"></label>
+        <button [style.width.%]="10" (click)='addAdvert(createAdvert(userID,text,endDate))' class="btn btn-outline-success">
+            <i class="fa fa-check" aria-hidden="true"></i>
+        </button>
+    </ng-container>
+    <hr/>
+    <br/>
+    <h2>Terminowe</h2>
+    <hr/>
+    <ng-container *ngIf="loadedAdverts==1">
+        <ng-container>
+            <div [style.width.%]="100">
+                <div [style.width.%]="100" class="form-check form-check-inline">
+                    <div [style.width.%]="65"><label [style.width.%]="100" style="vertical-align: middle;" style="font-weight:bold">Treść</label></div>
+                    <div [style.width.%]="10"><label [style.width.%]="100" style="vertical-align: middle;" style="font-weight:bold">Dodał</label></div>
+                    <div [style.width.%]="15"><label [style.width.%]="100" style="vertical-align: middle;" style="font-weight:bold">Termin</label></div>
+                    <div [style.width.%]="10"><label [style.width.%]="100" style="vertical-align: middle;" style="font-weight:bold">Akcja</label></div>
+                </div>
+            </div>
+            <hr/>
+        </ng-container>
+
+        <ng-container *ngFor="let item of dateAdverts; let i = index">
+            <div [style.width.%]="100">
+                <div [style.width.%]="100" class="form-check form-check-inline">
+                    <div [style.width.%]="65"><label [style.width.%]="100" style="vertical-align: middle;">{{item.Text}}</label></div>
+                    <div [style.width.%]="10"><label [style.width.%]="100" style="vertical-align: middle;">{{item.User.Login}}</label></div>
+                    <div [style.width.%]="15"><label [style.width.%]="100" style="vertical-align: middle;">{{item.EndDate}}</label></div>
+                    <div [style.width.%]="10">
+                        <button [style.width.%]="100" (click)="removeAdvert(item)" class="btn btn-outline-danger" style="vertical-align: middle;">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+        </ng-container>
+    </ng-container>
+    <br>
+    <h2>Bezterminowe</h2>
+    <hr/>
+    <ng-container *ngIf="loadedAdverts==1">
+        <ng-container>
+            <div [style.width.%]="100">
+                <div [style.width.%]="100" class="form-check form-check-inline">
+                    <div [style.width.%]="80"><label [style.width.%]="100" style="vertical-align: middle;" style="font-weight:bold">Treść</label></div>
+                    <div [style.width.%]="10"><label [style.width.%]="100" style="vertical-align: middle;" style="font-weight:bold">Dodał</label></div>
+                    <div [style.width.%]="10"><label [style.width.%]="100" style="vertical-align: middle;" style="font-weight:bold">Akcja</label></div>
+                </div>
+            </div>
+            <hr/>
+        </ng-container>
+
+        <ng-container *ngFor="let item of noDateAdverts; let i = index">
+            <div [style.width.%]="100">
+                <div [style.width.%]="100" class="form-check form-check-inline">
+                    <div [style.width.%]="80"><label [style.width.%]="100" style="vertical-align: middle;">{{item.Text}}</label></div>
+                    <div [style.width.%]="10"><label [style.width.%]="100" style="vertical-align: middle;">{{item.User.Login}}</label></div>
+                    <div [style.width.%]="10">
+                        <button [style.width.%]="100" (click)="removeAdvert(item)" class="btn btn-outline-danger" style="vertical-align: middle;">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+        </ng-container>
+    </ng-container>
+</ng-container>
+
+
+
+
+<ng-container *ngIf="isMobile">
+    <br/>
+    <ng-container *ngIf="loadedAdverts==1">
+        <button [style.width.%]="100" *ngIf="!add" (click)="setAdd()" class="btn btn-outline-primary">
+            <i class="fa fa-arrow-down" aria-hidden="true"></i>
+        </button>
+        <ng-container *ngIf="add">
+            <button [style.width.%]="100" (click)="setAdd()" class="btn btn-outline-primary">
+                <i class="fa fa-arrow-up" aria-hidden="true"></i>
+            </button>
+            <br/>
+            <br/>
+            <div [style.width.%]="100"><textarea class="form-control" placeholder="tekst" [(ngModel)]="text" [style.width.%]="100"></textarea></div>
+            <select [style.width.%]="30" [(ngModel)]="userID" class="custom-select">
+                <option *ngFor="let user of getUsersItems()" [value]="user.ID">{{user.Login}}</option>
+            </select>
+            <label [style.width.%]="50"><input class="form-control" placeholder="yyyy-MM-dd [HH:mm]" [(ngModel)]="endDate"
+                    style="padding-top: 0.1em"></label>
+            <button [style.width.%]="20" (click)='addAdvert(createAdvert(userID,text,endDate))' class="btn btn-outline-success">
+                <i class="fa fa-check" aria-hidden="true"></i>
+            </button>
+        </ng-container>
+    </ng-container>
+    <hr/>
+    <ng-container>
+        <div [style.width.%]="100" class="form-check form-check-inline">
+            <div [style.width.%]="50">
+                <button *ngIf="!tab[0]" [style.width.%]="100" (click)="changeTab(0)" class="btn btn-outline-primary" style="vertical-align: middle;">
+                    Terminowe
+                </button>
+                <button *ngIf="tab[0]" [style.width.%]="100" class="btn btn-primary" style="vertical-align: middle;">
+                    Terminowe
+                </button>
+            </div>
+            <div [style.width.%]="50">
+                <button *ngIf="!tab[1]" [style.width.%]="100" (click)="changeTab(1)" class="btn btn-outline-primary" style="vertical-align: middle;">
+                    Bezterminowe
+                </button>
+                <button *ngIf="tab[1]" [style.width.%]="100" class="btn btn-primary" style="vertical-align: middle;">
+                    Bezterminowe
+                </button>
+            </div>
+        </div>
+    </ng-container>
+    <hr>
+    <br/>
+
+    <ng-container *ngIf="loadedAdverts==1 && tab[0]">
+        <ng-container>
+            <div [style.width.%]="100">
+                <div [style.width.%]="100" class="form-check form-check-inline">
+                    <div [style.width.%]="80"><label [style.width.%]="100" style="vertical-align: middle;" style="font-weight:bold">Nazwa</label></div>
+                    <div [style.width.%]="20"><label [style.width.%]="100" style="vertical-align: middle;" style="font-weight:bold">Akcja</label></div>
+                </div>
+            </div>
+            <hr/>
+        </ng-container>
+
+        <ng-container *ngFor="let item of dateAdverts; let i = index">
+            <div [style.width.%]="100">
+                <div [style.width.%]="100" class="form-check form-check-inline">
+                    <div [style.width.%]="80">
+                        <div><label [style.width.%]="80"><b>Termin: {{shortenDate(item.EndDate)}}</b></label></div>
+                        <label [style.width.%]="100" style="vertical-align: middle;">{{item.Text}}</label>
+                    </div>
+                    <div [style.width.%]="20" *ngIf="!dateDetails[i]">
+                        <button [style.width.%]="100" (click)="getDateDetails(i)" class="btn btn-outline-info" style="vertical-align: middle;">
+                            <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div [style.width.%]="20" *ngIf="dateDetails[i]">
+                        <button [style.width.%]="100" (click)="getDateDetails(i)" class="btn btn-outline-info" style="vertical-align: middle;">
+                            <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+                <div [style.width.%]="100" *ngIf="dateDetails[i]" class="form-check form-check-inline">
+                    <div [style.width.%]="80">
+                        <div><label [style.width.%]="80">Dodał: {{item.User.Login}}</label></div>
+                    </div>
+                    <button [style.width.%]="20" (click)="removeAdvert(item)" class="btn btn-outline-danger" style="vertical-align: middle;">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+            <hr/>
+        </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="loadedAdverts==1 && tab[1]">
+        <ng-container>
+            <div [style.width.%]="100">
+                <div [style.width.%]="100" class="form-check form-check-inline">
+                    <div [style.width.%]="80"><label [style.width.%]="100" style="vertical-align: middle;" style="font-weight:bold">Nazwa</label></div>
+                    <div [style.width.%]="20"><label [style.width.%]="100" style="vertical-align: middle;" style="font-weight:bold">Akcja</label></div>
+                </div>
+            </div>
+            <hr/>
+        </ng-container>
+
+        <ng-container *ngFor="let item of noDateAdverts; let i = index">
+            <div [style.width.%]="100">
+                <div [style.width.%]="100" class="form-check form-check-inline">
+                    <div [style.width.%]="80"><label [style.width.%]="100" style="vertical-align: middle;">{{item.Text}}</label></div>
+                    <div [style.width.%]="20" *ngIf="!noDateDetails[i]">
+                        <button [style.width.%]="100" (click)="getNoDateDetails(i)" class="btn btn-outline-info" style="vertical-align: middle;">
+                            <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div [style.width.%]="20" *ngIf="noDateDetails[i]">
+                        <button [style.width.%]="100" (click)="getNoDateDetails(i)" class="btn btn-outline-info" style="vertical-align: middle;">
+                            <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+                <div [style.width.%]="100" *ngIf="noDateDetails[i]" class="form-check form-check-inline">
+                    <div [style.width.%]="80">
+                        <div><label [style.width.%]="80">Dodał: {{item.User.Login}}</label></div>
+                    </div>
+                    <button [style.width.%]="20" (click)="removeAdvert(item)" class="btn btn-outline-danger" style="vertical-align: middle;">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+            <hr/>
+        </ng-container>
+    </ng-container>
+</ng-container>

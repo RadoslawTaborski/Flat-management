@@ -7,6 +7,8 @@ import { User } from './models/user';
 import { Balance } from './models/balance';
 import { Payment, DalPayment, PaymentMapper } from './models/payment';
 import { CleaningMapper, DalCleaning } from './models/cleaning';
+import { DalAdvert, AdvertMapper } from './models/adverts';
+import { ParametersService } from './parameters.service';
 
 const httpOptions = {
   headers: new HttpHeaders()
@@ -16,7 +18,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class DbService {
-  private apiUrl: string = 'http://192.168.1.4:81/gajowaapi.php/';
+  private apiUrl: string = ParametersService.ApiUrl;
 
   private _shoppingItems: string = 'items';
   private _users: string = 'users';
@@ -24,20 +26,23 @@ export class DbService {
   private _balances: string = 'balances';
   private _cleaners: string = 'cleaners';
   private _cleanings: string = 'cleanings';
+  private _adverts: string = 'adverts';
   private _lastCleaning: string = 'lastcleaning';
   private _paymentAction: string = 'paymentaction';
 
   private _addShoppingItem: string = 'addItem/';
   private _addPayment: string = 'addPayment/';
   private _addCleaning: string = 'addCleaning/';
+  private _addAdvert: string = 'addAdvert/';
   private _removeShoppingItem: string = 'removeItem/';
+  private _removeAdvert: string = 'removeAdvert/';
   private _rollbackAction: string = 'rollbackAction/';
   private _rollback: string = 'rollback/';
 
   constructor(private _http: HttpClient) {
   }
 
-   getShoppingItems (): Promise<any[]> {
+  getShoppingItems (): Promise<any[]> {
     return this._http.get<any[]>(this.apiUrl+this._shoppingItems).toPromise();
   }
 
@@ -55,6 +60,10 @@ export class DbService {
 
   getCleaners (): Promise<any[]> {
     return this._http.get<any[]>(this.apiUrl+this._cleaners).toPromise();
+  }
+
+  getAdverts (): Promise<any[]> {
+    return this._http.get<any[]>(this.apiUrl+this._adverts).toPromise();
   }
 
   getCleaning (): Promise<any[]> {
@@ -75,18 +84,6 @@ export class DbService {
     return this._http.post<any>(this.apiUrl+this._addShoppingItem, json, httpOptions).toPromise();
   }
 
-  removeShoppingItem(Id: number): Promise<any> {
-    return this._http.post<any>(this.apiUrl+this._removeShoppingItem+Id, "", httpOptions).toPromise();
-  }
-
-  rollbackAction(Id: number): Promise<any> {
-    return this._http.post<any>(this.apiUrl+this._rollbackAction+Id, "", httpOptions).toPromise();
-  }
-
-  rollback(Id: number): Promise<any> {
-    return this._http.post<any>(this.apiUrl+this._rollback+Id, "", httpOptions).toPromise();
-  }
-
   addPayment (item: DalPayment): Promise<any> {
     let json = PaymentMapper.ConvertToJSONFromDAL(item);
     //console.log(json);
@@ -97,6 +94,28 @@ export class DbService {
     let json = CleaningMapper.ConvertToJSONFromDAL(item);
     //console.log(json);
     return this._http.post<any>(this.apiUrl+this._addCleaning, json , httpOptions).toPromise();
+  }
+
+  addAdvert (item: DalAdvert): Promise<any> {
+    let json = AdvertMapper.ConvertToJSONFromDAL(item);
+    //console.log(json);
+    return this._http.post<any>(this.apiUrl+this._addAdvert, json , httpOptions).toPromise();
+  }
+  
+  removeShoppingItem(Id: number): Promise<any> {
+    return this._http.post<any>(this.apiUrl+this._removeShoppingItem+Id, "", httpOptions).toPromise();
+  }
+
+  removeAdvert(Id: number): Promise<any> {
+    return this._http.post<any>(this.apiUrl+this._removeAdvert+Id, "", httpOptions).toPromise();
+  }
+
+  rollbackAction(Id: number): Promise<any> {
+    return this._http.post<any>(this.apiUrl+this._rollbackAction+Id, "", httpOptions).toPromise();
+  }
+
+  rollback(Id: number): Promise<any> {
+    return this._http.post<any>(this.apiUrl+this._rollback+Id, "", httpOptions).toPromise();
   }
 }
 
