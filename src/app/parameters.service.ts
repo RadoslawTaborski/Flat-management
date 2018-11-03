@@ -11,5 +11,7 @@ export class ParametersService {
   //static TitleName="Bema";
   //static theme="united" //both of this parameters can to change in index.html head
 
+  //also it is necessary clone php api and database.sql script (change databese name in both)
+
   constructor() { }
 }

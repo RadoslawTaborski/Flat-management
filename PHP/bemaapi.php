@@ -31,7 +31,7 @@ if($table == ""){
 }
 
 // connect to the mysql database
-$link = mysqli_connect($masterAdress, 'rado', 'Ameba123', 'gajowa')
+$link = mysqli_connect($masterAdress, 'rado', 'Ameba123', 'bema')
 or die('Error connectiong to MySQL server');
 
 mysqli_set_charset($link,'utf8');
