@@ -4,10 +4,10 @@ header("Content-Type: application/json");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 header("Access-Control-Allow-Methods: GET, OPTIONS, DELETE");
 
-require_once("./GajowaApi/get.php");
-require_once("./GajowaApi/delete.php");
-require_once("./GajowaApi/put.php");
-require_once("./GajowaApi/post.php");
+require_once("./FinanceManagement/get.php");
+require_once("./FinanceManagement/delete.php");
+require_once("./FinanceManagement/put.php");
+require_once("./FinanceManagement/post.php");
 
 // get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];
@@ -26,7 +26,7 @@ $key = clear(array_shift($request)+0);
 
 if($table == ""){
   header("Content-Type: text/html; charset=utf-8");
-  readfile('./GajowaApi/api.html' );
+  readfile('./FinanceManagement/api.html' );
   die();
 }
 
