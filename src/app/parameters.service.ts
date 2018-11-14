@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class ParametersService {
   static AppName="Beeeema"
-  static ApiUrl="http://localhost/bemaapi.php/";
+  static ApiUrl="http://webapp.zapto.org:81/bemaapi.php/";
   static FooterText="© Bema - Radosław Taborski - 2018"
 
   //static TitleName="Bema";

@@ -36,7 +36,7 @@
                 <div [style.width.%]="100" class="form-check form-check-inline">
                     <div [style.width.%]="65"><label [style.width.%]="100" style="vertical-align: middle;">{{item.Text}}</label></div>
                     <div [style.width.%]="10"><label [style.width.%]="100" style="vertical-align: middle;">{{item.User.Login}}</label></div>
-                    <div [style.width.%]="15"><label [style.width.%]="100" style="vertical-align: middle;">{{item.EndDate}}</label></div>
+                    <div [style.width.%]="15"><label [style.width.%]="100" style="vertical-align: middle;">{{shortenDate(item.EndDate)}}</label></div>
                     <div [style.width.%]="10">
                         <button [style.width.%]="100" (click)="removeAdvert(item)" class="btn btn-outline-danger" style="vertical-align: middle;">
                             <i class="fa fa-times" aria-hidden="true"></i>
