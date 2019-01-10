@@ -44,7 +44,7 @@
     <ng-container *ngIf="loadedPayments==1">
         <ng-container>
             <label [style.width.%]="20" style="font-weight:bold">Nazwa</label>
-            <label [style.width.%]="20" style="font-weight:bold">Dodał</label>
+            <label [style.width.%]="20" style="font-weight:bold">Wydał</label>
             <label [style.width.%]="15" style="font-weight:bold">Dotyczy</label>
             <label [style.width.%]="15" style="font-weight:bold">Kwota</label>
             <label [style.width.%]="20" style="font-weight:bold">Data</label>
@@ -159,7 +159,7 @@
                     <button [style.width.%]="20" *ngIf="checkDate(item)" (click)="rollback(item)" class="btn btn-outline-danger float-right">
                         <i class="fa fa-times" aria-hidden="true"></i>
                     </button>
-                    <label [style.width.%]="40">Dodał: {{item.User1.Login}}</label>
+                    <label [style.width.%]="40">Wydał: {{item.User1.Login}}</label>
                     <label [style.width.%]="40">Data: {{item.AddDate.substring(0,10)}}</label>
                 </div>
                 <hr/>
