@@ -209,10 +209,8 @@ export class PaymentComponent implements OnInit {
   };
 
   async rollback(item: PaymentGroup) {
-    //console.log(item, item.Action)
-    item.Payments.forEach(async element => {
-      await this._dbService.rollback(element.ID);
-    });
+    console.log(item, item.Action)
+    await this._dbService.rollbackAction(item.Action)
     this.getPayments();
   };
 

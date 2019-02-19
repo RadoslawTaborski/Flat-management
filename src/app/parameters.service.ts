@@ -4,9 +4,9 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ParametersService {
-  static AppName="Beeeema"
+  static AppName="Beeema"
   static ApiUrl="http://webapp.zapto.org:81/bemaapi.php/";
-  static FooterText="© Bema - Radosław Taborski - 2018"
+  static FooterText="© Beeema - Radosław Taborski - 2018"
 
   //static TitleName="Bema";
   //static theme="united" //both of this parameters can to change in index.html head

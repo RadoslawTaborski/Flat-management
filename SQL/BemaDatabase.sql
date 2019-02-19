@@ -107,15 +107,29 @@ DROP PROCEDURE IF EXISTS `Rollback`$$
 CREATE DEFINER=`rado`@`localhost` PROCEDURE `Rollback` (IN `paymentId` INT)  NO SQL
 BEGIN
 	UPDATE payments SET `Rollback` = 1 WHERE ID = paymentId;
-    SELECT @u1 := User1ID, @u2 := User2ID, @v := Amount FROM payments WHERE ID = paymentId;
-    UPDATE balances SET `Value` = `Value` - @v WHERE User1ID = @u1 AND User2ID = @u2;
-	UPDATE balances SET `Value` = `Value` + @v WHERE User1ID = @u2 AND User2ID = @u1;
+END$$
+
+DROP PROCEDURE IF EXISTS `BalancesCorrection`$$
+CREATE DEFINER=`rado`@`%` PROCEDURE `BalancesCorrection` ()  NO SQL
+BEGIN
+	SET @size := (SELECT Count(*) FROM users);
+    SET @u1 = 1;
+    WHILE @u1<@size DO
+		SET @u2 = @u1+1;
+		WHILE @u2<=@size DO
+			SET @v := (SELECT COALESCE(SUM(S),0) FROM (SELECT COALESCE(SUM(Amount),0) as S FROM payments WHERE Rollback=0 AND User1ID=@u1 AND User2ID=@u2 UNION SELECT COALESCE(SUM(-1*Amount),0) FROM payments WHERE Rollback=0 AND User1ID=@u2 AND User2ID=@u1) t1);
+			UPDATE balances SET `Value` = @v WHERE User1ID = @u1 AND User2ID = @u2;
+			UPDATE balances SET `Value` = (-1*@v) WHERE User1ID = @u2 AND User2ID = @u1;
+			SET @u2 = @u2 + 1;
+		END WHILE;
+        SET @u1 = @u1 + 1;
+    END WHILE;
 END$$
 
 DROP PROCEDURE IF EXISTS `RollbackAction`$$
 CREATE DEFINER=`rado`@`localhost` PROCEDURE `RollbackAction` (IN `actionId` INT)  NO SQL
 BEGIN
-	SELECT @size := Count(*) FROM payments WHERE Action=actionId;
+	SET @size := (SELECT Count(*) FROM payments WHERE Action=actionId AND Rollback=0);
     SET @i = 0;
     SET @countNum = 1;
     WHILE @i<@size DO
@@ -125,6 +139,8 @@ BEGIN
         CALL Rollback(@outvar);
         SET @i = @i + 1;
     END WHILE;
+    
+    CALL BalancesCorrection();
 END$$
 
 DELIMITER ;

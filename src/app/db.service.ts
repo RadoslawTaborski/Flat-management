@@ -38,6 +38,7 @@ export class DbService {
   private _removeAdvert: string = 'removeAdvert/';
   private _rollbackAction: string = 'rollbackAction/';
   private _rollback: string = 'rollback/';
+  private _balancesCorrection: string = 'balancesCorrection';
 
   constructor(private _http: HttpClient) {
   }
@@ -116,6 +117,10 @@ export class DbService {
 
   rollback(Id: number): Promise<any> {
     return this._http.post<any>(this.apiUrl+this._rollback+Id, "", httpOptions).toPromise();
+  }
+
+  balancesCorrection(): Promise<any> {
+    return this._http.post<any>(this.apiUrl+this._balancesCorrection, "", httpOptions).toPromise();
   }
 }
 
